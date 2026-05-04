@@ -1,0 +1,98 @@
+@use "../../../styles/abstracts/global" as *;
+@use "../../../styles/abstracts/mixins" as *;
+@use "../../../styles/abstracts/normalize" as *;
+@use "../../../styles/abstracts/variables" as *;
+
+.timeslot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  margin: 2rem 0;
+  border-radius: 1rem;
+  box-shadow: 2px 5px 8px rgba($color: #242424, $alpha: 0.4);
+
+  &__tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 1rem;
+  }
+
+  &__tab {
+    border: none;
+    border-radius: .5rem;
+    margin: .5rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    box-shadow: 1px 3px 4px rgba($color: #242424, $alpha: 0.4);
+
+    &--active {
+      background-color: #245e97;
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  & > p {
+    text-align: center;
+    width: 100%;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: .5rem;
+    margin: .5rem;
+    min-height: 3rem;
+    font-size: 1.6rem;
+    box-shadow: 1px 3px 4px rgba($color: #242424, $alpha: 0.4);
+    & > span {
+      color: inherit;
+    }
+
+    &--selected {
+      background-color: black;
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  @include tablet {
+    border: none;
+    box-shadow: none;
+    padding: 1rem;
+    margin: 0;
+  }
+
+  @include desktop {
+
+    & > p {
+      font-size: 2.5rem;
+    }
+
+    &__tab {
+      height: 7rem;
+      font-size: 2.5rem;
+    }
+
+    &__slot {
+      height: 7rem;
+      font-size: 2.5rem;
+    }
+  }
+}
+
+@include desktop {
+  .unavailable {
+    font-size: 2.5rem;
+  }
+}

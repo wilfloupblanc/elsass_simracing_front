@@ -1,0 +1,229 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.subscriptions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 2rem 0;
+    width: 90%;
+    background-color: rgba(#242424, 0.8);
+    border-radius: 1rem;
+
+    &--title {
+      & > h1 {
+        text-align: center;
+      }
+
+      & > p {
+        width: 100%;
+        margin: 0;
+        text-align: center;
+      }
+    }
+
+    &--club {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 2rem;
+      width: 90%;
+      background-color: #242424;
+      border: 1px solid #245e97;
+      border-radius: 1rem;
+      padding: 2rem 0.5rem;
+
+      & > h2 {
+        text-align: center;
+        margin: 0;
+      }
+
+      & > h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        & > span {
+          font-size: 3rem;
+        }
+      }
+
+      & > div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        height: 5rem;
+
+        & > .icon-wrapper {
+          width: 3rem;
+          height: 3rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem;
+        }
+
+        & > p {
+          font-size: 1.5rem;
+
+          & > .value {
+            color: #717171;
+          }
+        }
+      }
+
+      & > .none {
+        & > .icon-wrapper, p {
+          color: #5c5c5c;
+        }
+      }
+
+      & > button {
+        text-align: center;
+        background-color: #245e97;
+        border: none;
+        width: 100%;
+        padding: 1rem;
+        border-radius: 1rem;
+        font-size: 2rem;
+        box-shadow: 2px 5px 8px rgba(#0000, 0.4);
+      }
+    }
+
+    & .popular {
+      position: relative;
+      border: white 1px solid;
+
+      &__badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: -1rem;
+        left: 2rem;
+        background-color: #245E97;
+        width: 15rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+      }
+    }
+
+    &--member-prices {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 2rem;
+      width: 90%;
+      background-color: #242424;
+      border: 1px solid #245e97;
+      border-radius: 1rem;
+      padding: 2rem 0;
+
+      & > h2 {
+        margin: 0;
+      }
+
+      & > .grid-table {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        text-align: center;
+        font-size: 1.5rem;
+        align-items: stretch;
+
+        & > span {
+          padding: 1.5rem 0.5rem;
+          border-bottom: 1px solid rgba(#245E97, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:nth-child(-n+3) {
+            font-weight: bold;
+            background-color: rgba(#245E97, 0.25);
+          }
+
+          &:nth-child(3n+1) {
+            font-weight: bold;
+          }
+        }
+      }
+
+      & > p {
+        text-align: center;
+        font-size: 1.5rem;
+        margin: 1rem 0 0 0;
+      }
+    }
+
+    &--note {
+      display: flex;
+      width: 90%;
+      background-color: rgba(#245E97, 0.6);
+      border: 1px solid #245e97;
+      border-radius: 1rem;
+      box-shadow: 2px 5px 8px rgba(#000, 0.4);
+      padding: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    & > .conditions {
+      text-align: center;
+      width: 90%;
+      padding: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    span:not(.icon-wrapper) {
+      font-weight: bold;
+    }
+
+    @include desktop {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
+      position: relative;
+
+      &--title {
+        grid-column: 1 / -1;
+      }
+
+      &--note {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 20%;
+        height: 12rem;
+        font-size: 1.2rem;
+        margin: 0;
+      }
+
+      &--club {
+        width: auto;
+        margin: 1rem;
+        align-self: stretch;
+      }
+
+      &--member-prices {
+        grid-column: 1 / -1;
+        width: auto;
+        margin: 1rem;
+      }
+
+      & > .conditions {
+        grid-column: 1 / -1;
+        justify-self: center;
+      }
+    }
+  }
+
+}
+

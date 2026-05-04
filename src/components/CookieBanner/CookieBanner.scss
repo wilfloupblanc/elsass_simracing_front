@@ -1,0 +1,73 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #1a1a1a;
+  border-top: 2px solid #245E97;
+  padding: 1.6rem;
+
+  &__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    p {
+      color: #ccc;
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.4rem;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1.2rem;
+
+    @include tablet {
+      flex-shrink: 0;
+    }
+  }
+
+  &__btn {
+    flex: 1;
+    padding: 0.8rem 1.8rem;
+    border-radius: 4px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border: none;
+
+    @include tablet {
+      flex: unset;
+    }
+
+    &--accept {
+      background: #245E97;
+      color: white;
+
+      &:hover { background: darken(#245E97, 10%); }
+    }
+
+    &--reject {
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #555;
+
+      &:hover { border-color: #ccc; }
+    }
+  }
+}

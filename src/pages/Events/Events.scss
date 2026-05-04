@@ -1,0 +1,106 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.events {
+  padding-bottom: 10rem;
+
+  &__hero {
+    padding: 3rem 2rem 2rem;
+
+    &--title {
+      font-size: 3.2rem;
+      font-weight: 700;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2.4rem;
+    width: 90%;
+
+    @include tablet {
+      padding: 0 4rem;
+    }
+
+    @include desktop {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0;
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    font-size: 1.6rem;
+    padding: 4rem 2rem;
+  }
+
+  &__badge {
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &--today {
+      background: #008000;
+    }
+
+    &--member {
+      background: #c9a227;
+    }
+
+    &--full {
+      background: #ff0000;
+    }
+  }
+
+  &__card--full {
+    text-align: center;
+    padding: 1.2rem;
+    border-radius: 0.8rem;
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    font-weight: 700;
+    font-size: 1.4rem;
+  }
+
+  &__tag {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(248, 248, 248, 0.3);
+
+    &--vehicle {
+      opacity: 0.7;
+    }
+  }
+
+  &__register-btn {
+    flex: 1;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 1.2rem;
+    border: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  &__member-cta {
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 1.2rem;
+    border-radius: 0.8rem;
+    border: none;
+    cursor: pointer;
+  }
+}

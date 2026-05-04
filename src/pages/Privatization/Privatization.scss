@@ -1,0 +1,101 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.privatization {
+
+  &__title {
+    position: relative;
+    width: 100%;
+    height: 20rem;
+    background: url("../../assets/images/priva-sim.jpg") center/cover no-repeat;
+
+    & > h1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    @include desktop {
+      height: 25rem;
+
+      & > h1 {
+        font-size: 7rem;
+      }
+    }
+  }
+
+  &__enterprise, &__particular {
+    & > h2 {
+      text-align: center;
+      width: 100%;
+      margin: 1.5rem 0;
+    }
+
+    &--infos {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(#242424, 0.8);
+      padding: 2rem 1rem;
+      width: 100%;
+
+      & > p {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      & > a {
+        background-color: #245E97;
+        border-radius: 1rem;
+        width: 75%;
+        height: 5rem;
+        padding: 1rem;
+        font-size: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        box-shadow: 2px 5px 8px rgba(#000, 0.4);
+
+        & > svg {
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    & > img {
+      width: 100%;
+      height: auto;
+    }
+
+    @include desktop {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      & > h2 {
+        width: 100%;
+      }
+
+      &--infos {
+        width: 60%;
+
+        & > p {
+          font-size: 2rem;
+        }
+      }
+
+      & > img {
+        width: 40%;
+        height: 60rem;
+      }
+    }
+  }
+}

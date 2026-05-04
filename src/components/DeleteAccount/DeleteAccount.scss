@@ -1,0 +1,29 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.delete-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  & > h2 {
+    text-align: center;
+    width: 100%;
+  }
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .sure, .back {
+      border-radius: .5rem;
+    }
+
+  }
+}

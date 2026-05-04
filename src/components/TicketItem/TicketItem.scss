@@ -1,0 +1,53 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.ticket-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  background-color: rgba(#245E97, 0.6);
+  margin: 2rem 0;
+  padding: 1rem 0;
+  border-radius: 1rem;
+
+  @include desktop {
+    width: 40%;
+    margin: 2rem;
+  }
+
+  & > h2 {
+    margin: 0;
+  }
+
+  & > span {
+    margin: 2rem 0;
+  }
+
+  &__quantity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #245E97;
+    padding: 0.5rem;
+    width: 50%;
+    height: 7rem;
+    border-radius: 1rem;
+    box-shadow: 2px 5px 8px rgba(#000, 0.4);
+
+    & > button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #000000;
+      border: none;
+      border-radius: 15rem;
+      width: 4rem;
+      height: 4rem;
+      color: white;
+    }
+  }
+}

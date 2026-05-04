@@ -1,0 +1,31 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.cancelMain {
+  width: 100vw;
+
+  .cancelTitle {
+    text-align: center;
+  }
+
+  .cancelSubtitle {
+    text-align: center;
+    margin: 10rem 0;
+  }
+
+  .cancelButtons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+
+    & > .button {
+      text-align: center;
+      border-radius: 1rem;
+      padding: 1rem;
+      width: 45%;
+    }
+  }
+}

@@ -1,0 +1,109 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  padding: 0 16px;
+  z-index: 100;
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex: 1;
+    height: 100%;
+  }
+
+  &__left__icons,
+  &__right__icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+
+    a, button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    button {
+      background: none;
+      border: none;
+    }
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .open {
+    position: fixed;
+    bottom: 7rem;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: rgba(#242424, 0.8);
+    flex-direction: column;
+    font-size: 2.5rem;
+    height: 100%;
+    width: 40%;
+    padding: 2rem;
+  }
+
+  aside {
+    a {
+      text-align: center;
+      width: 100%;
+      margin: .4rem 0;
+      font-size: 2.5rem;
+    }
+  }
+
+  &__before {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -5rem;
+
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    svg {
+      background-color: #245e97;
+      border-radius: 50%;
+      padding: 1.4rem;
+      width: 6rem;
+      height: 6rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  @include desktop {
+    display: none;
+  }
+}

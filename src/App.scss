@@ -1,0 +1,32 @@
+@use "./styles/abstracts/_index.scss" as *;
+
+* {
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  position: relative;
+}
+
+main {
+  min-height: calc(100vh - 15rem);
+  width: 100vw;
+  background: #245e97;
+  padding-top: 15rem;
+}
+
+h1, h2, h3, h4, p, span, a, li {
+  color: #F8F8F8;
+}

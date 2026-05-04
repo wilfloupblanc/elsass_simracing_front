@@ -1,0 +1,97 @@
+@use "../../../styles/abstracts/global" as *;
+@use "../../../styles/abstracts/mixins" as *;
+@use "../../../styles/abstracts/normalize" as *;
+@use "../../../styles/abstracts/variables" as *;
+
+.session-card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 1rem;
+  margin: 1rem 0;
+  padding: 1rem 0;
+  box-shadow: 2px 5px 8px rgba($color: #242424, $alpha: 0.4);
+  background: #242424;
+
+  &__duration {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.5rem;
+  }
+
+  &__duration-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: .5rem;
+    text-align: center;
+    height: auto;
+    min-height: 6rem;
+    box-shadow: 1px 3px 4px rgba($color: #242424, $alpha: 0.4);
+    font-size: 1.6rem;
+    margin: .5rem;
+    padding: 1rem 0.5rem;
+    color: black;
+
+    span {
+      color: black;
+    }
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    & > .check {
+      display: none;
+      font-size: 2rem;
+      margin: 0.2rem 0;
+    }
+
+    &.active {
+      background: #245e97;
+      color: white;
+
+      span {
+        color: white;
+      }
+
+      & > .check {
+        display: flex;
+      }
+    }
+
+    &__sub {
+      font-size: 1.3rem;
+      opacity: 0.7;
+      color: inherit;
+    }
+  }
+
+  @include tablet {
+    &__duration {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @include desktop {
+    &__duration {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    &__duration-btn {
+      min-height: 7rem;
+      font-size: 1.8rem;
+    }
+  }
+}

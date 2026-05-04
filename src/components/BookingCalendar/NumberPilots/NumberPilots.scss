@@ -1,0 +1,47 @@
+@use "../../../styles/abstracts/global" as *;
+@use "../../../styles/abstracts/mixins" as *;
+@use "../../../styles/abstracts/normalize" as *;
+@use "../../../styles/abstracts/variables" as *;
+
+.numberPilots {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 1rem;
+  padding: 0 1rem;
+
+  & > h3 {
+    color: white;
+    width: 60%;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+
+    & > button {
+      background: none;
+      border: none;
+      color: white;
+    }
+
+    & > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      width: 2rem;
+      height: 2.6rem;
+      color: white;
+    }
+
+    & > .more {
+      &--disabled {
+        color: grey;
+      }
+    }
+  }
+}

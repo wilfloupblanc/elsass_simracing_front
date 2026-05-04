@@ -1,0 +1,62 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.modal-content {
+    margin: 0 4rem;
+
+    h2 {
+        text-align: center;
+        font-size: 3rem;
+    }
+
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        label {
+            font-size: 2rem;
+        }
+
+        input {
+            background: transparent;
+            border: 1px solid grey;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            height: 3rem;
+            color: #fefefe;
+        }
+
+        .submit {
+            margin-top: 2rem;
+            padding: 1.2rem 3rem;
+            font-size: 1.6rem;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            cursor: pointer;
+            background-color: #2a4a63;
+
+            &:hover, &:focus {
+                background-color: darken(#2a4a63, 10%);
+            }
+        }
+    }
+    .pratique {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+
+        & > button {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            @include tablet {
+                padding: 1rem;
+            }
+        }
+    }
+}

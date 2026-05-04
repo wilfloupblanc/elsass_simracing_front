@@ -1,0 +1,286 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 15rem;
+  z-index: 100;
+
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70%;
+  }
+
+  .top img {
+    max-width: 55rem;
+    width: 100%;
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 30%;
+    padding: 0 0.5rem;
+
+    @include desktop {
+      padding: 0 2rem;
+    }
+
+    &__center {
+      display: none;
+
+      @include desktop {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex: 1;
+        height: 7rem;
+        padding: 0 1.6rem;
+        font-size: 2rem;
+
+        & > a {
+          color: #F8F8F8;
+        }
+
+        & > .reservation {
+          color: #F8F8F8;
+          background-color: #245E97;
+          border-radius: 0.5rem;
+          padding: 0.5rem;
+          width: 15rem;
+          text-align: center;
+          font-size: 2rem;
+        }
+
+        & > .menu {
+          background: none;
+          border: none;
+          color: #F8F8F8;
+          font-size: 2rem;
+        }
+
+        .sidebar {
+          display: none;
+        }
+
+        .open {
+          position: absolute;
+          top: 4.5rem;
+          right: 0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          background-color: rgba(#242424, 0.8);
+          flex-direction: column;
+          font-size: 2.5rem;
+          width: 100%;
+          padding: 2rem;
+          z-index: 100;
+        }
+
+        aside {
+          a {
+            text-align: center;
+            width: 100%;
+            margin: .4rem 0;
+            font-size: 2.5rem;
+          }
+        }
+      }
+    }
+
+    &__right {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      flex-shrink: 0;
+
+      .sidebar {
+        display: none;
+      }
+
+      .open {
+        position: fixed;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        font-size: 2.5rem;
+        min-height: 3rem;
+        width: 100%;
+        padding: 2rem;
+        z-index: 90;
+      }
+
+      aside {
+        a {
+          text-align: center;
+          width: 100%;
+          margin: .4rem 0;
+          font-size: 2.5rem;
+        }
+
+        @include desktop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+
+      #cart-panel {
+        position: fixed;
+        top: 15rem;
+        right: 0;
+        height: calc(100vh - 7rem);
+        width: 75%;
+        background: rgba(#245E97, 0.8);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+
+        &.open {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          overflow-y: auto;
+          transform: translateX(0);
+          width: 100%;
+        }
+
+        &.empty {
+          justify-content: center;
+        }
+
+        .cart-item-mini {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding:3rem 1rem;
+          gap: 1.5rem;
+          border-radius: 0.8rem;
+          margin-bottom: 1.5rem;
+          position: relative;
+          box-shadow: 2px 5px 8px rgba($color: #000000, $alpha: 0.4);
+
+          .cart-item-mini-details {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-right: 3rem;
+            align-items: center;
+
+            .cart-item-mini-label {
+              flex: 1;
+              h3 {
+                margin: 0;
+                font-size: 1.8rem;
+                font-weight: 600;
+              }
+            }
+
+            .cart-item-mini-info {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 1px solid #245E97;
+              border-radius: 1rem;
+              background-color: #245E97;
+              padding: 0.5rem 1rem;
+              box-shadow: 2px 5px 8px rgba($color: #000000, $alpha: 0.4);
+
+              .price {
+                font-size: 1.8rem;
+                font-weight: 600;
+              }
+            }
+
+            .cart-item-mini-quantity {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              margin-top: 0.5rem;
+              font-size: 1.6rem;
+
+              & > span {
+                margin: 0 1rem;
+              }
+            }
+          }
+
+          .btn-remove-mini {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border: none;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 1.8rem;
+            background: none;
+
+            &:hover {
+              background: rgba($color: #ff0000, $alpha: 1);
+            }
+          }
+        }
+
+        @include tablet {
+          width: 30rem;
+
+          &.open {
+            width: 50rem;
+          }
+        }
+
+        .validate-cart {
+          position: sticky;
+          bottom: 1rem;
+          width: calc(100% - 2rem);
+          margin: 1rem auto 0;
+          padding: 1.2rem;
+          border: none;
+          border-radius: 1rem;
+          font-size: 1.8rem;
+          font-weight: 700;
+          cursor: pointer;
+          background-color: #242424;
+          box-shadow: 2px 5px 8px rgba($color: #000000, $alpha: 0.4);
+          transition: background 0.3s;
+
+          &:hover, &:focus {
+            background-color: darken(#2a4a63, 10%);
+          }
+        }
+      }
+
+      @include desktop {
+        position: absolute;
+        right: 2rem;
+      }
+
+      & > button {
+        background: none;
+        border: none;
+        color: #fefefe;
+      }
+    }
+  }
+}

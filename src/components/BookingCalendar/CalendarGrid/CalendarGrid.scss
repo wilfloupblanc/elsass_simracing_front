@@ -1,0 +1,70 @@
+@use "../../../styles/abstracts/global" as *;
+@use "../../../styles/abstracts/mixins" as *;
+@use "../../../styles/abstracts/normalize" as *;
+@use "../../../styles/abstracts/variables" as *;
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    background: #ededed;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1rem 0;
+
+    & > span {
+      text-align: center;
+      width: 15rem;
+    }
+
+    & > button {
+      background: none;
+      border: none;
+    }
+  }
+
+  &__days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    padding: 1rem;
+  }
+
+  &__cell {
+    border: none;
+    height: 3rem;
+    border-radius: .5rem;
+    margin: .5rem;
+    padding: .5rem 0;
+    box-shadow: 1px 3px 4px rgba($color: #242424, $alpha: 0.4);
+
+    &--selected {
+      background: #245e97;
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  @include desktop {
+    &__cell {
+      height: 7rem;
+      font-size: 2.5rem;
+    }
+  }
+}

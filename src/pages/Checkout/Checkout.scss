@@ -1,0 +1,149 @@
+@use "../../styles/abstracts/global" as *;
+@use "../../styles/abstracts/mixins" as *;
+@use "../../styles/abstracts/normalize" as *;
+@use "../../styles/abstracts/variables" as *;
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    text-align: center;
+    width: 100%;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background-color: rgba(#242424, 0.8);
+    border-radius: 1rem;
+    padding: 1rem;
+
+    h2 {
+      text-align: center;
+      width: 100%;
+    }
+
+    &--recipient {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid rgba(white, 0.15);
+      border-radius: 0.5rem;
+
+      p {
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: rgba(white, 0.7);
+        margin: 0;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(white, 0.2);
+        background-color: rgba(white, 0.05);
+        color: white;
+        font-size: 1.4rem;
+        outline: none;
+        transition: border-color 0.2s;
+
+        &::placeholder {
+          color: rgba(white, 0.3);
+        }
+
+        &:focus {
+          border-color: rgba(white, 0.5);
+        }
+      }
+
+      @include desktop {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        input {
+          width: 30%;
+        }
+      }
+    }
+  }
+  &__remove-recipient, &__remove-item {
+    align-self: flex-end;
+    padding: 0.4rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(red, 0.4);
+    background: transparent;
+    color: rgba(red, 0.7);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: red;
+      color: red;
+    }
+  }
+
+
+  &__add-recipient {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px dashed rgba(white, 0.3);
+    background: transparent;
+    color: rgba(white, 0.7);
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: rgba(white, 0.6);
+      color: white;
+    }
+  }
+
+  &__pay-on-site {
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid rgba(white, 0.4);
+    background: transparent;
+    color: white;
+    margin-top: 1rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(white, 0.1);
+      border-color: white;
+    }
+  }
+
+  .submit {
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    margin-top: 2rem;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__warning {
+    text-align: center;
+  }
+}
