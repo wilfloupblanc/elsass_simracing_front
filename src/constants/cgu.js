@@ -1,6 +1,6 @@
 const CGU_CONTENT = `
 <h1>Conditions Générales d'Utilisation (CGU)</h1>
-<p><strong>Centre de Simracing Elsass Simracing</strong><br>Dernière mise à jour : 30/08/2025</p>
+<p><strong>Centre de Simracing Elsass Simracing</strong><br>Dernière mise à jour : 04/05/2026</p>
 <h2>1. Objet</h2>
 <p>Les présentes Conditions Générales d'Utilisation ont pour objet de définir les modalités d'accès et d'utilisation du site de réservation en ligne exploité par Elsass Simracing.<br>En réservant une session, l'utilisateur accepte sans réserve les présentes CGU.</p>
 <h2>2. Accès au service</h2>

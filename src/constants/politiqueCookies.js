@@ -1,6 +1,6 @@
 const POLITIQUE_COOKIES_CONTENT = `
 <h1>Politique de Cookies</h1>
-<p>Dernière mise à jour : 30/08/2025</p>
+<p>Dernière mise à jour : 04/05/2026</p>
 
 <h2>1. Qu'est-ce qu'un cookie ?</h2>
 <p>

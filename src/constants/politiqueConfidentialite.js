@@ -1,6 +1,6 @@
 const POLITIQUE_CONFIDENTIALITE_CONTENT = `
 <h1>Politique de Confidentialité</h1>
-<p>Dernière mise à jour : 30/08/2025</p>
+<p>Dernière mise à jour : 04/05/2026</p>
 
 <h2>1. Responsable du traitement</h2>
 <p>
