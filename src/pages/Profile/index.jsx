@@ -11,6 +11,7 @@ import {EditEmail} from "../../components/EditEmail/index.jsx";
 import {NavLink} from "react-router";
 import {useGetFreeSessionQuery} from "../../store/ApiSlice/giftVoucherApiSlice.js";
 import {useGetAllPlansQuery} from "../../store/ApiSlice/planApiSlice.js";
+import {useGetMyBookingsQuery, useCancelBookingMutation} from "../../store/ApiSlice/bookingApiSlice.js";
 
 export const Profile = () => {
     const {user} = useAuthenticated()
@@ -27,8 +28,41 @@ export const Profile = () => {
     const freeSession = freeSessionData?.giftVoucher
     const {data: plansData} = useGetAllPlansQuery()
     const currentPlan = plansData?.plans?.find(p => p.plan === subscription?.plan)
+    const {data: bookingsData, refetch: refetchBookings} = useGetMyBookingsQuery(undefined, { skip: !user })
+    const bookings = bookingsData?.bookings ?? []
+    const [cancelBooking] = useCancelBookingMutation()
 
     const isPendingCancellation = subscription?.status === "pending_cancellation"
+
+    const now = new Date()
+
+    const getBookingDateTime = (booking) => {
+        const d = new Date(booking.date)
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return new Date(`${year}-${month}-${day}T${booking.start_time}`)
+    }
+
+    const upcomingBookings = bookings.filter(b => getBookingDateTime(b) > now)
+    const pastBookings = bookings.filter(b => getBookingDateTime(b) <= now)
+
+    const isCancellable = (booking) => {
+        const bookingDateTime = getBookingDateTime(booking)
+        const diffHours = (bookingDateTime.getTime() - now.getTime()) / (1000 * 60 * 60)
+        return diffHours >= 1
+    }
+
+    const handleCancelBooking = async (bookingId, onClose) => {
+        try {
+            await cancelBooking(bookingId).unwrap()
+            onClose()
+            refetchBookings()
+        } catch (error) {
+            console.error("Cancel booking error:", error)
+            onClose()
+        }
+    }
 
     const handleCancel = async (closeAlert, onClose) => {
         await cancelSubscription().unwrap()
@@ -64,6 +98,22 @@ export const Profile = () => {
             "Accès aux soirées privées et événements spécial membre",
         ],
     }
+
+    const formatDate = (date) => {
+        const d = new Date(date)
+        // Utiliser les méthodes locales plutôt que toISOString() qui retourne en UTC
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return new Date(`${year}-${month}-${day}T12:00:00`).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        })
+    }
+
+    const formatTime = (time) => time?.slice(0, 5)
 
     return (
         <main className="profile">
@@ -173,6 +223,65 @@ export const Profile = () => {
                             <NavLink to="/subscriptions" className="profile__edit-btn" style={{textAlign: "center", display: "block"}}>
                                 Rejoindre le Club SimRacing
                             </NavLink>
+                        </>
+                    )}
+                </article>
+            </section>
+
+            <section className="profile__section">
+                <p className="profile__section--label">Mes réservations</p>
+                <article className="profile__card bg-third">
+                    {upcomingBookings.length > 0 ? (
+                        <>
+                            <p className="profile__section--sublabel">À venir</p>
+                            {upcomingBookings.map(booking => (
+                                <div key={booking.id} className="profile__booking">
+                                    <div className="profile__booking--info">
+                                        <p className="profile__booking--date">{formatDate(booking.date)}</p>
+                                        <p className="profile__booking--details">
+                                            {formatTime(booking.start_time)} – {formatTime(booking.end_time)}
+                                            {booking.session_name && ` · ${booking.session_name}`}
+                                            {booking.pilots > 1 && ` · ${booking.pilots} pilotes`}
+                                        </p>
+                                        <p className="profile__booking--price">{booking.price_paid?.toFixed(2)}€</p>
+                                    </div>
+                                    {isCancellable(booking) && (
+                                        <Alert openBtnText="Annuler" btnClassName="profile__cancel-btn profile__cancel-btn--small">
+                                            {({ onClose }) => (
+                                                <>
+                                                    <p>Annuler la réservation du {formatDate(booking.date)} à {formatTime(booking.start_time)} ?</p>
+                                                    <p>Vous serez remboursé intégralement.</p>
+                                                    <button onClick={onClose}>Conserver</button>
+                                                    <button onClick={() => handleCancelBooking(booking.id, onClose)} className="bg-error text-secondary">
+                                                        Confirmer l'annulation
+                                                    </button>
+                                                </>
+                                            )}
+                                        </Alert>
+                                    )}
+                                </div>
+                            ))}
+                        </>
+                    ) : (
+                        <p className="profile__card--row">Aucune réservation à venir</p>
+                    )}
+
+                    {pastBookings.length > 0 && (
+                        <>
+                            <p className="profile__section--sublabel" style={{marginTop: "16px"}}>Passées</p>
+                            {pastBookings.slice(0, 3).map(booking => (
+                                <div key={booking.id} className="profile__booking profile__booking--past">
+                                    <div className="profile__booking--info">
+                                        <p className="profile__booking--date">{formatDate(booking.date)}</p>
+                                        <p className="profile__booking--details">
+                                            {formatTime(booking.start_time)} – {formatTime(booking.end_time)}
+                                            {booking.session_name && ` · ${booking.session_name}`}
+                                            {booking.pilots > 1 && ` · ${booking.pilots} pilotes`}
+                                        </p>
+                                        <p className="profile__booking--price">{booking.price_paid?.toFixed(2)}€</p>
+                                    </div>
+                                </div>
+                            ))}
                         </>
                     )}
                 </article>

@@ -1,5 +1,4 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-
 export const bookingApiSlice = createApi({
     reducerPath: 'bookingApi',
     baseQuery: fetchBaseQuery({
@@ -23,9 +22,24 @@ export const bookingApiSlice = createApi({
         getBookingById: build.query({
             query: (id) => `/${id}`,
             providesTags: ["booking"]
+        }),
+        getMyBookings: build.query({
+            query: () => "/me",
+            providesTags: ["booking"]
+        }),
+        cancelBooking: build.mutation({
+            query: (id) => ({
+                url: `/cancel/${id}`,
+                method: "POST",
+            }),
+            invalidatesTags: ["booking"]
         })
     })
 })
-
-export const { useCreateBookingMutation, useGetBookingByIdQuery } = bookingApiSlice
+export const {
+    useCreateBookingMutation,
+    useGetBookingByIdQuery,
+    useGetMyBookingsQuery,
+    useCancelBookingMutation
+} = bookingApiSlice
 export const { resetApiState } = bookingApiSlice.util

@@ -24,7 +24,7 @@ const PlanButton = ({ plan, label, isAlreadyMember, currentPlan, isLoading, isCh
                     <>
                         <h3>Changer de plan</h3>
                         <p>Passer de <strong>{currentPlan}</strong> à <strong>{plan}</strong> ?</p>
-                        <p>Le changement sera effectif immédiatement avec prorata.</p>
+                        <p>Le changement sera effectif immédiatement avec prorata, <strong>ce prorata sera ajouté à la facture du mois suivant</strong>.</p>
                         <div>
                             <button className="text-secondary bg-third" onClick={onClose}>Annuler</button>
                             <button
