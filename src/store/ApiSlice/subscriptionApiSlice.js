@@ -1,5 +1,4 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react"
-
 export const subscriptionApiSlice = createApi({
     reducerPath: "subscriptionApi",
     baseQuery: fetchBaseQuery({
@@ -34,6 +33,13 @@ export const subscriptionApiSlice = createApi({
             }),
             invalidatesTags: ["subscription"]
         }),
+        reactivateSubscription: build.mutation({
+            query: () => ({
+                url: "/reactivate",
+                method: "POST",
+            }),
+            invalidatesTags: ["subscription"]
+        }),
         changePlan: build.mutation({
             query: (plan) => ({
                 url: "/change-plan",
@@ -44,11 +50,11 @@ export const subscriptionApiSlice = createApi({
         }),
     })
 })
-
 export const {
     useGetSubscriptionsQuery,
     useGetMySubscriptionQuery,
     useSubscribeMutation,
     useCancelSubscriptionMutation,
+    useReactivateSubscriptionMutation,
     useChangePlanMutation
 } = subscriptionApiSlice
