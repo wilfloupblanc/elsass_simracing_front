@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   h1 {
     text-align: center;
@@ -72,8 +73,13 @@
         }
       }
     }
+    .checkout-infos {
+      font-size: 1rem;
+      text-align: center;
+    }
+
   }
-  &__remove-recipient, &__remove-item {
+  &__remove-recipient {
     align-self: flex-end;
     padding: 0.4rem 1rem;
     border-radius: 0.5rem;
@@ -87,6 +93,29 @@
     &:hover {
       border-color: red;
       color: red;
+    }
+  }
+
+  &__remove-item {
+    position: absolute;
+    left: 18rem;
+    top: 33rem;
+    padding: 0.4rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(red, 0.4);
+    background: transparent;
+    color: rgba(red, 0.7);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: red;
+      color: red;
+    }
+    @include desktop {
+      left: 25rem;
+      top: 34.8rem;
     }
   }
 

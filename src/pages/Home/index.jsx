@@ -46,7 +46,7 @@ export const Home = () => {
             <section className="categories bg-third">
                 <div className="car">
                     <img src={gt3} alt="image GT3 car"/>
-                    <p className="text-primary">GT3</p>
+                    <p className="text-primary">GT</p>
                 </div>
                 <div className="car">
                     <img src={formula} alt="image formula car"/>

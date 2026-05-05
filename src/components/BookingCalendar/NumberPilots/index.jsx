@@ -15,7 +15,7 @@ export const NumberPilots = ({player, setPlayer, minPilots = 1, maxPilots = 6}) 
                     disabled={isMinPlayer}
                     className={`more ${isMinPlayer ? "more--disabled" : ""}`}
                 >
-                    <LessThanIcon size={20} />
+                    <LessThanIcon size={30} />
                 </button>
                 <span>{player}</span>
                 <button
@@ -23,7 +23,7 @@ export const NumberPilots = ({player, setPlayer, minPilots = 1, maxPilots = 6}) 
                     disabled={isMaxPlayer}
                     className={`more ${isMaxPlayer ? "more--disabled" : ""}`}
                 >
-                    <GreaterThanIcon size={20} />
+                    <GreaterThanIcon size={30} />
                 </button>
             </div>
         </div>

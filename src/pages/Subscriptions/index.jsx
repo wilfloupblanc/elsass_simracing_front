@@ -12,9 +12,11 @@ import React from "react"
 
 import "./Subscriptions.scss"
 import {Alert} from "../../components/Alert/index.jsx";
+import {useDispatch} from "react-redux";
+import {setIsModalOpen} from "../../store/slice/authSlice.js";
 
 
-const PlanButton = ({ plan, label, isAlreadyMember, currentPlan, isLoading, isChangingPlan, onSubscribe, onChangePlan }) => {
+const PlanButton = ({ plan, label, isAlreadyMember, currentPlan, isLoading, isChangingPlan, onSubscribe, onChangePlan, isAuth, onOpenLogin }) => {
     if (isAlreadyMember && currentPlan !== plan) {
         return (
             <Alert openBtnText={`Passer en ${plan}`} btnClassName="text-secondary">
@@ -44,7 +46,7 @@ const PlanButton = ({ plan, label, isAlreadyMember, currentPlan, isLoading, isCh
 
     return (
         <button
-            onClick={() => onSubscribe(plan)}
+            onClick={() => isAuth ? onSubscribe(plan) : onOpenLogin()}
             disabled={isLoading || isChangingPlan || currentPlan === plan}
             className="text-secondary"
         >
@@ -55,6 +57,7 @@ const PlanButton = ({ plan, label, isAlreadyMember, currentPlan, isLoading, isCh
 
 export const Subscriptions = () => {
 
+    const dispatch = useDispatch()
     const {isAuth, user} = useAuthenticated()
     const [subscribe, {isLoading}] = useSubscribeMutation()
     const {data: plansData} = useGetAllPlansQuery()
@@ -89,7 +92,16 @@ export const Subscriptions = () => {
         window.location.assign(result.url)
     }
 
-    const planButtonProps = { isAlreadyMember, currentPlan, isLoading, isChangingPlan, onSubscribe: handleSubscribe, onChangePlan: changePlan }
+    const planButtonProps = {
+        isAlreadyMember,
+        currentPlan,
+        isLoading,
+        isChangingPlan,
+        onSubscribe: handleSubscribe,
+        onChangePlan: changePlan,
+        isAuth,
+        onOpenLogin: () => dispatch(setIsModalOpen({ isModalOpen: true }))
+    }
 
     return (
         <main className="subscriptions">

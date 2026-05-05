@@ -6,7 +6,7 @@ import {useDeleteCartItemsMutation, useGetCartQuery} from "../../store/ApiSlice/
 import "./Checkout.scss"
 import {useCheckoutMutation} from "../../store/ApiSlice/orderApiSlice.js";
 import {useCreateBookingMutation} from "../../store/ApiSlice/bookingApiSlice.js";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useAddRecipientMutation} from "../../store/ApiSlice/cartItemRecipientApiSlice.js";
 import {useGetFreeSessionQuery} from "../../store/ApiSlice/giftVoucherApiSlice.js";
 
@@ -18,7 +18,6 @@ export const Checkout = () => {
     const {data: authUser} = useGetAuthenticatedUserQuery()
     const [checkout, {isLoading}] = useCheckoutMutation()
     const session = state ? sessions?.sessions?.find(s => s.duration_minutes === state.duration) : null
-    const [payOnSite, setPayOnSite] = useState(false)
     const [createBooking, {isLoading: isLoadingBooking}] = useCreateBookingMutation()
     const navigate = useNavigate()
     const [recipients, setRecipients] = useState({})
@@ -36,7 +35,7 @@ export const Checkout = () => {
             : 0
     const cartTotal = cart?.reduce((acc, item) => acc + (authUser?.is_member === 1 ? item.price_member : item.price_normal) * item.quantity, 0) ?? 0
     const totalCheckout = price + cartTotal
-    const [deleteCartItem, {isSuccess}] = useDeleteCartItemsMutation()
+    const [deleteCartItem] = useDeleteCartItemsMutation()
 
     const recipientsFilled = !cart || cart.length === 0 || cart.every(item =>
         (recipients[item.id] ?? []).length >= item.quantity &&
@@ -68,14 +67,16 @@ export const Checkout = () => {
         }))
     }
 
-    useEffect(() => {
-        if (!cart) return
-        const initial = {}
-        cart.forEach(item => {
-            initial[item.id] = [{ firstname: "", lastname: "", email: "" }]
-        })
-        setRecipients(initial)
+    const initialRecipients = useMemo(() => {
+        if (!cart) return {}
+        return Object.fromEntries(
+            cart.map(item => [item.id, [{ firstname: "", lastname: "", email: "" }]])
+        )
     }, [cart])
+
+    useEffect(() => {
+        setRecipients(initialRecipients)
+    }, [initialRecipients])
 
     const handleBooking = async () => {
         if (cart) {
@@ -259,17 +260,22 @@ export const Checkout = () => {
                     </button>
                 }
 
-                {state && (!cart || cart.length === 0) && !isEvent &&
-                    <button onClick={() => setPayOnSite(true)} className="checkout__pay-on-site">
-                        Payer sur place
+                {state && (!cart || cart.length === 0) && !isEvent && !useFreeSession &&
+                    <button
+                        onClick={handlePayOnSite}
+                        disabled={isLoadingBooking}
+                        className="checkout__pay-on-site"
+                    >
+                        {isLoadingBooking ? "Chargement..." : "Payer sur place"}
                     </button>
                 }
+
                 <button
-                    onClick={payOnSite || useFreeSession ? handlePayOnSite : handleBooking}
+                    onClick={useFreeSession ? handlePayOnSite : handleBooking}
                     disabled={isLoading || isLoadingBooking || !recipientsFilled}
                     className="bg-third text-secondary submit"
                 >
-                    {payOnSite || useFreeSession ? "Confirmer la réservation" : "Procéder au paiement"}
+                    {useFreeSession ? "Confirmer la session gratuite" : "Procéder au paiement"}
                 </button>
 
                 {cart && cart.length > 0 && !recipientsFilled && (
@@ -277,6 +283,10 @@ export const Checkout = () => {
                         Veuillez renseigner tous les destinataires de bons cadeaux avant de procéder au paiement.
                     </p>
                 )}
+                <p className="checkout-infos">✔ Aucun paiement débité avant confirmation</p>
+                <p className="checkout-infos">
+                    🔒 Paiement sécurisé vous serez redirigé vers Stripe pour finaliser votre paiement
+                </p>
             </section>
         </main>
     )
