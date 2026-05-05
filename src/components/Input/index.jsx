@@ -1,19 +1,23 @@
+import "./Input.scss"
 
-export const Input = ({inputName, value, inputType, labelText, inputComplete, onChange, ...props}) => {
+export const Input = ({inputName, value, inputType, labelText, inputComplete, onChange, suffix, ...props}) => {
     return (
         <>
             <label htmlFor={inputName} className="text-secondary">
                 {labelText}
             </label>
-            <input
-                id={inputName}
-                name={inputName}
-                value={value}
-                type={inputType}
-                autoComplete={inputComplete}
-                onChange={onChange}
-                {...props}
-            />
+            <div className="input-wrapper">
+                <input
+                    id={inputName}
+                    name={inputName}
+                    value={value}
+                    type={inputType}
+                    autoComplete={inputComplete}
+                    onChange={onChange}
+                    {...props}
+                />
+                {suffix && <span className="input-suffix">{suffix}</span>}
+            </div>
         </>
     )
 }

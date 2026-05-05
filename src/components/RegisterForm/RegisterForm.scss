@@ -24,9 +24,12 @@
             background: transparent;
             border: 1px solid grey;
             border-radius: 4px;
-            margin-bottom: 1rem;
             height: 3rem;
             color: #fefefe;
+        }
+
+        .input-wrapper {
+            margin-bottom: 1rem;
         }
 
         .submit {
@@ -38,7 +41,6 @@
             border-radius: 1rem;
             cursor: pointer;
             background-color: #2a4a63;
-
             &:hover, &:focus {
                 background-color: darken(#2a4a63, 10%);
             }

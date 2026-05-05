@@ -8,6 +8,7 @@ import {showToast} from "@store/slice/toastSlice.js";
 import {NavLink, useNavigate} from "react-router";
 import {clearPendingReservation} from "../../store/slice/authSlice.js";
 import {useSyncCart} from "../../hooks/useSyncCart.js";
+import { EyeIcon, EyeSlashIcon} from "@phosphor-icons/react";
 
 export const LoginForm = ({toggle, onClose}) => {
     const [loginEmail, setLoginEmail] = useState("")
@@ -17,6 +18,7 @@ export const LoginForm = ({toggle, onClose}) => {
     const {pendingReservation} = useSelector((state) => state.auth)
     const navigate = useNavigate()
     const { syncCart, isLocalCart } = useSyncCart()
+    const [showPassword, setShowPassword] = useState(false)
 
     useEffect(() => {
         if (!isLoading && isSuccess && data?.user) {
@@ -71,10 +73,20 @@ export const LoginForm = ({toggle, onClose}) => {
                 <Input
                     inputName="password"
                     value={loginPassword}
-                    inputType="password"
+                    inputType={showPassword ? "text" : "password"}
                     labelText="Mot de passe"
                     inputComplete="off"
                     onChange={(e) => setLoginPassword(e.target.value)}
+                    suffix={
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(prev => !prev)}
+                            className="password-toggle"
+                            aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                        >
+                            {showPassword ? <EyeSlashIcon size={18} /> : <EyeIcon size={18} />}
+                        </button>
+                    }
                 />
 
                 <button type="submit" className="submit">Confirmer</button>

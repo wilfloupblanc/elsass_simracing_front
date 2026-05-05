@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router";
 import {clearPendingReservation} from "../../store/slice/authSlice.js";
 import {useSyncCart} from "../../hooks/useSyncCart.js";
+import { EyeIcon, EyeSlashIcon} from "@phosphor-icons/react";
 
 export const RegisterForm = ({toggle, onClose}) => {
 
@@ -19,6 +20,8 @@ export const RegisterForm = ({toggle, onClose}) => {
     const {pendingReservation} = useSelector((state) => state.auth)
     const navigate = useNavigate()
     const { syncCart, isLocalCart } = useSyncCart()
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     useEffect(() => {
         if (!isLoading && isSuccess) {
@@ -65,8 +68,42 @@ export const RegisterForm = ({toggle, onClose}) => {
                 <Input inputName="firstname" value={firstname} inputType="firstname" labelText="Prénom" onChange={(e) => setFirstname(e.target.value)}/>
                 <Input inputName="lastname" value={lastname} inputType="lastname" labelText="Nom de Famille" onChange={(e) => setLastname(e.target.value)}/>
                 <Input inputName="email" value={email} inputType="email" labelText="Email" inputComplete="email" onChange={(e) => setEmail(e.target.value)}/>
-                <Input inputName="password" value={password} inputType="password" labelText="Mot de passe" inputComplete="off" onChange={(e) => setPassword(e.target.value)}/>
-                <Input inputName="confirm_password" value={confirmPassword} inputType="password" labelText="Confirmer mot de passe" inputComplete="off" onChange={(e) => setConfirmPassword(e.target.value)}/>
+                <Input
+                    inputName="password"
+                    value={password}
+                    inputType={showPassword ? "text" : "password"}
+                    labelText="Mot de passe"
+                    inputComplete="off"
+                    onChange={(e) => setPassword(e.target.value)}
+                    suffix={
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(prev => !prev)}
+                            className="password-toggle"
+                            aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                        >
+                            {showPassword ? <EyeSlashIcon size={18} /> : <EyeIcon size={18} />}
+                        </button>
+                    }
+                />
+                <Input
+                    inputName="confirm_password"
+                    value={confirmPassword}
+                    inputType={showConfirmPassword ? "text" : "password"}
+                    labelText="Confirmer mot de passe"
+                    inputComplete="off"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    suffix={
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(prev => !prev)}
+                            className="password-toggle"
+                            aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                        >
+                            {showConfirmPassword ? <EyeSlashIcon size={18} /> : <EyeIcon size={18} />}
+                        </button>
+                    }
+                />
 
                 <button
                     type="submit"
