@@ -28,6 +28,8 @@ export const Profile = () => {
     const freeSession = freeSessionData?.giftVoucher
     const {data: plansData} = useGetAllPlansQuery()
     const currentPlan = plansData?.plans?.find(p => p.plan === subscription?.plan)
+    const pendingPlan = plansData?.plans?.find(p => p.plan === subscription?.pending_plan)
+    const renewalPlan = pendingPlan ?? currentPlan
     const {data: bookingsData, refetch: refetchBookings} = useGetMyBookingsQuery(undefined, { skip: !user })
     const bookings = bookingsData?.bookings ?? []
     const [cancelBooking] = useCancelBookingMutation()
@@ -101,7 +103,6 @@ export const Profile = () => {
 
     const formatDate = (date) => {
         const d = new Date(date)
-        // Utiliser les méthodes locales plutôt que toISOString() qui retourne en UTC
         const year = d.getFullYear()
         const month = String(d.getMonth() + 1).padStart(2, '0')
         const day = String(d.getDate()).padStart(2, '0')
@@ -152,6 +153,15 @@ export const Profile = () => {
                                 <span className="text-success">{currentPlan?.plan}</span>
                             </p>
 
+                            {subscription?.pending_plan && (
+                                <p className="profile__card--row">
+                                    <span>Changement prévu</span>
+                                    <span className="text-primary">
+                                        Passage en {subscription.pending_plan} le {new Date(subscription.current_period_end).toLocaleDateString('fr-FR')}
+                                    </span>
+                                </p>
+                            )}
+
                             {isPendingCancellation ? (
                                 <p className="profile__card--row">
                                     <span>Statut</span>
@@ -163,7 +173,7 @@ export const Profile = () => {
                                 <p className="profile__card--row">
                                     <span>Renouvellement</span>
                                     <span>
-                                        {new Date(subscription.current_period_end).toLocaleDateString('fr-FR')} à {currentPlan?.price.toFixed(2)}€/mois
+                                        {new Date(subscription.current_period_end).toLocaleDateString('fr-FR')} à {renewalPlan?.price.toFixed(2)}€/mois
                                     </span>
                                 </p>
                             )}
@@ -171,7 +181,7 @@ export const Profile = () => {
                             {freeSession &&
                                 <p className="profile__card--row">
                                     <span>Session offerte</span>
-                                    <span className="text-success">15 min disponible – expire le {new Date(freeSession.expires_at).toLocaleDateString('fr-FR')}</span>
+                                    <span className="text-success">15 min disponible — expire le {new Date(freeSession.expires_at).toLocaleDateString('fr-FR')}</span>
                                 </p>
                             }
 
@@ -239,9 +249,9 @@ export const Profile = () => {
                                     <div className="profile__booking--info">
                                         <p className="profile__booking--date">{formatDate(booking.date)}</p>
                                         <p className="profile__booking--details">
-                                            {formatTime(booking.start_time)} – {formatTime(booking.end_time)}
-                                            {booking.session_name && ` · ${booking.session_name}`}
-                                            {booking.pilots > 1 && ` · ${booking.pilots} pilotes`}
+                                            {formatTime(booking.start_time)} — {formatTime(booking.end_time)}
+                                            {booking.session_name && ` — ${booking.session_name}`}
+                                            {booking.pilots > 1 && ` — ${booking.pilots} pilotes`}
                                         </p>
                                         <p className="profile__booking--price">{booking.price_paid?.toFixed(2)}€</p>
                                     </div>
@@ -274,9 +284,9 @@ export const Profile = () => {
                                     <div className="profile__booking--info">
                                         <p className="profile__booking--date">{formatDate(booking.date)}</p>
                                         <p className="profile__booking--details">
-                                            {formatTime(booking.start_time)} – {formatTime(booking.end_time)}
-                                            {booking.session_name && ` · ${booking.session_name}`}
-                                            {booking.pilots > 1 && ` · ${booking.pilots} pilotes`}
+                                            {formatTime(booking.start_time)} — {formatTime(booking.end_time)}
+                                            {booking.session_name && ` — ${booking.session_name}`}
+                                            {booking.pilots > 1 && ` — ${booking.pilots} pilotes`}
                                         </p>
                                         <p className="profile__booking--price">{booking.price_paid?.toFixed(2)}€</p>
                                     </div>

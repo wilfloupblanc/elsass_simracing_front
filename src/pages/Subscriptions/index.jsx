@@ -24,7 +24,7 @@ const PlanButton = ({ plan, label, isAlreadyMember, currentPlan, isLoading, isCh
                     <>
                         <h3>Changer de plan</h3>
                         <p>Passer de <strong>{currentPlan}</strong> à <strong>{plan}</strong> ?</p>
-                        <p>Le changement sera effectif immédiatement avec prorata, <strong>ce prorata sera ajouté à la facture du mois suivant</strong>.</p>
+                        <p>Le changement sera <strong>effectif à partir du prochain renouvellement</strong>. Vous conservez votre plan actuel jusqu'à la fin de la période en cours.</p>
                         <div>
                             <button className="text-secondary bg-third" onClick={onClose}>Annuler</button>
                             <button
@@ -82,8 +82,6 @@ export const Subscriptions = () => {
 
         if (isAlreadyMember) {
             if (currentPlan === plan) return
-            const confirmed = window.confirm(`Passer au plan ${plan} ?`)
-            if (!confirmed) return
             await changePlan(plan).unwrap()
             return
         }
@@ -162,10 +160,6 @@ export const Subscriptions = () => {
                     </div>
                     <div>
                         <span className="icon-wrapper"><CheckIcon size={32} /></span>
-                        <p><span>Accès aux services membres exclusifs</span></p>
-                    </div>
-                    <div>
-                        <span className="icon-wrapper"><CheckIcon size={32} /></span>
                         <p><span>Accès aux soirées privées et événements spécial membre</span></p>
                     </div>
                     <div>
@@ -191,10 +185,6 @@ export const Subscriptions = () => {
                     <div>
                         <span className="icon-wrapper"><CheckIcon size={32} /></span>
                         <p><span>Tarifs réduits</span> au bar</p>
-                    </div>
-                    <div>
-                        <span className="icon-wrapper"><CheckIcon size={32} /></span>
-                        <p><span>Accès aux services membres exclusifs</span></p>
                     </div>
                     <div>
                         <span className="icon-wrapper"><CheckIcon size={32} /></span>

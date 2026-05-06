@@ -100,6 +100,7 @@ export const Checkout = () => {
             event_price: isEvent ? state?.event_price ?? null : null,
             event_title: isEvent ? state?.event_title ?? null : null,
             pilots_count: isEvent ? state?.pilots_count ?? null : null,
+            selected_vehicle: isEvent ? state?.selected_vehicle ?? null : null,
         })
         window.location.assign(result.data.url)
     }
@@ -182,6 +183,9 @@ export const Checkout = () => {
                             <p>Date : {new Date(state.event_date).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}</p>
                             <p>Horaires : {state.event_start_time?.slice(0, 5)} — {state.event_end_time?.slice(0, 5)}</p>
                             <p>Pilotes : {state.pilots_count}</p>
+                            {state.selected_vehicle && (
+                                <p>Véhicule : {state.selected_vehicle}</p>
+                            )}
                             {state.pilots_list?.map((p, i) => (
                                 <p key={i}>Pilote {i + 1} : {p.firstname} {p.lastname}</p>
                             ))}
@@ -195,7 +199,7 @@ export const Checkout = () => {
                         {cart.map(item => (
                             <article key={item.id} className="checkout__items--ticket">
                                 <p>Ticket {item.duration_minutes} minutes</p>
-                                <p>{item.quantity} x {(authUser?.is_member === 1 ? item.price_member : item.price_normal).toFixed(2)} €</p>
+                                <p>{item.quantity} x {(item.price_normal).toFixed(2)} €</p>
                                 <button
                                     onClick={() => removeItem(item.id)}
                                     className="checkout__remove-item"
@@ -242,7 +246,7 @@ export const Checkout = () => {
                                 }
                             </article>
                         ))}
-                        <h3>Total bons cadeaux: {cart.reduce((acc, item) => acc + (authUser?.is_member === 1 ? item.price_member : item.price_normal) * item.quantity, 0).toFixed(2)} € TTC</h3>
+                        <h3>Total bons cadeaux: {cart.reduce((acc, item) => acc + (item.price_normal) * item.quantity, 0).toFixed(2)} € TTC</h3>
                     </>
                 }
 

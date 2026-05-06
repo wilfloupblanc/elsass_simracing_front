@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { NavLink } from "react-router"
 import { useDispatch } from "react-redux"
 import { setIsModalOpen, setPendingReservation } from "../../store/slice/authSlice.js"
@@ -16,6 +17,8 @@ export const EventCard = ({ event, user, isAuth, today }) => {
     const categories = event.vehicle_categories ? JSON.parse(event.vehicle_categories) : []
     const isMembersOnly = event.access === 'members'
     const canRegister = !isMembersOnly || user?.is_member === 1
+
+    const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0] ?? null)
 
     const isToday = () => {
         const d = new Date(event.date)
@@ -42,16 +45,19 @@ export const EventCard = ({ event, user, isAuth, today }) => {
         'linear-gradient(135deg,#1a1a2a,#0d0d1d)',
     ]
 
-    const bannerEmojis = ['🏁', '🎮', '🏆', '🎯', '🚀', '⚡']
+    const bannerEmojis = ['🏁', '🏆', '🚗', '⚡', '🔥', '🎯']
     const bannerIndex = event.id % bannerColors.length
 
     return (
         <article className="events__card bg-third">
             <div
                 className="events__card--banner"
-                style={{ background: bannerColors[bannerIndex] }}
+                style={{ background: event.banner_image ? 'transparent' : bannerColors[bannerIndex] }}
             >
-                <span className="events__card--emoji">{bannerEmojis[bannerIndex]}</span>
+                {event.banner_image
+                    ? <img src={event.banner_image} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : <span className="events__card--emoji">{bannerEmojis[bannerIndex]}</span>
+                }
                 <div className="events__card--badges">
                     {isToday() && (
                         <span className="events__badge events__badge--today">Aujourd'hui</span>
@@ -101,6 +107,18 @@ export const EventCard = ({ event, user, isAuth, today }) => {
                     </div>
                 ) : canRegister ? (
                     <div className="events__card--actions">
+                        {vehicles.length > 0 && (
+                            <select
+                                value={selectedVehicle}
+                                onChange={e => setSelectedVehicle(e.target.value)}
+                                className="events__vehicle-select bg-secondary text-secondary"
+                            >
+                                {vehicles.map((v, i) => (
+                                    <option key={i} value={v}>{v}</option>
+                                ))}
+                            </select>
+                        )}
+
                         {Array.from({ length: event.pilots_per_simulator }, (_, i) => i + 1).map(count => (
                             <Modale
                                 key={count}
@@ -120,6 +138,7 @@ export const EventCard = ({ event, user, isAuth, today }) => {
                                         pilotsCount={count}
                                         onClose={onClose}
                                         user={user}
+                                        selectedVehicle={selectedVehicle}
                                     />
                                 )}
                             </Modale>

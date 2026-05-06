@@ -1,9 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
-
 import "./EventRegistrationForm.scss"
 
-export const EventRegistrationForm = ({ event, pilotsCount, onClose, user }) => {
+export const EventRegistrationForm = ({ event, pilotsCount, onClose, user, selectedVehicle }) => {
     const navigate = useNavigate()
     const [pilots, setPilots] = useState(
         Array.from({ length: pilotsCount }, (_, i) =>
@@ -33,6 +32,7 @@ export const EventRegistrationForm = ({ event, pilotsCount, onClose, user }) => 
                 event_price: event.price,
                 pilots_count: pilotsCount,
                 pilots_list: pilots,
+                selected_vehicle: selectedVehicle ?? null,
             }
         })
     }
@@ -41,7 +41,8 @@ export const EventRegistrationForm = ({ event, pilotsCount, onClose, user }) => 
         <div className="events__form">
             <h3 className="events__form--title">S'inscrire — {event.title}</h3>
             <p className="events__form--subtitle">
-                {pilotsCount} pilote{pilotsCount > 1 ? 's' : ''} · {event.price} €
+                {pilotsCount} pilote{pilotsCount > 1 ? 's' : ''} — {event.price} €
+                {selectedVehicle && <> — <strong>{selectedVehicle}</strong></>}
             </p>
             <form onSubmit={handleSubmit}>
                 {pilots.map((pilot, i) => (
