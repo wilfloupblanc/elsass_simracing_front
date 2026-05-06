@@ -7,6 +7,7 @@ import {useNavigate} from "react-router";
 import {clearPendingReservation} from "../../store/slice/authSlice.js";
 import {useSyncCart} from "../../hooks/useSyncCart.js";
 import { EyeIcon, EyeSlashIcon} from "@phosphor-icons/react";
+import {PasswordHints} from "../PasswordHints/index.jsx";
 
 export const RegisterForm = ({toggle, onClose}) => {
 
@@ -86,6 +87,7 @@ export const RegisterForm = ({toggle, onClose}) => {
                         </button>
                     }
                 />
+                <PasswordHints password={password} />
                 <Input
                     inputName="confirm_password"
                     value={confirmPassword}
@@ -104,6 +106,9 @@ export const RegisterForm = ({toggle, onClose}) => {
                         </button>
                     }
                 />
+                {confirmPassword && confirmPassword !== password && (
+                    <p className="password-match-error">Les mots de passe ne correspondent pas</p>
+                )}
 
                 <button
                     type="submit"
