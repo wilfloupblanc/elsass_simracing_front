@@ -1,7 +1,5 @@
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer"
-import QRCode from "qrcode/lib/browser"
-import { useEffect, useState } from "react"
-import logo from "../../assets/images/logo_e_simracing.png"
+import logo from "../../assets/images/logoSite2.png"
 
 const styles = StyleSheet.create({
     page: { padding: 40, fontFamily: "Helvetica" },
@@ -18,15 +16,7 @@ const styles = StyleSheet.create({
     qrLabel: { fontSize: 10, marginTop: 6, textAlign: "center", color: "#555" },
 })
 
-export const EventRegistrationPdf = ({ eventReservation, order }) => {
-    const [qrCodeUrl, setQrCodeUrl] = useState(null)
-
-    useEffect(() => {
-        if (!eventReservation?.booking_id) return
-        const qrData = `${import.meta.env.VITE_APP_URL}/admin/booking/${eventReservation.booking_id}`
-        QRCode.toDataURL(qrData).then(url => setQrCodeUrl(url))
-    }, [eventReservation])
-
+export const EventRegistrationPdf = ({ eventReservation, order, qrUrl }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -35,7 +25,6 @@ export const EventRegistrationPdf = ({ eventReservation, order }) => {
                 </View>
                 <Text style={styles.title}>Elsass SimRacing</Text>
                 <Text style={styles.subtitle}>Confirmation d'inscription événement</Text>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Informations commande</Text>
                     <Text style={styles.row}>Commande n°: {order?.order_number}</Text>
@@ -43,7 +32,6 @@ export const EventRegistrationPdf = ({ eventReservation, order }) => {
                     <Text style={styles.row}>Client: {order?.firstname} {order?.lastname}</Text>
                     <Text style={styles.row}>Statut: {order?.is_member === 1 ? "Membre" : "Non membre"}</Text>
                 </View>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Événement</Text>
                     <Text style={styles.row}>Événement : {eventReservation?.event_title}</Text>
@@ -51,16 +39,14 @@ export const EventRegistrationPdf = ({ eventReservation, order }) => {
                         Date : {new Date(eventReservation?.event_date).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
                     </Text>
                     <Text style={styles.row}>
-                        Horaires : {eventReservation?.event_start_time?.slice(0, 5)} — {eventReservation?.event_end_time?.slice(0, 5)}
+                        Horaires : {eventReservation?.event_start_time?.slice(0, 5)} – {eventReservation?.event_end_time?.slice(0, 5)}
                     </Text>
                     <Text style={styles.row}>Pilotes : {eventReservation?.quantity}</Text>
                 </View>
-
                 <Text style={styles.total}>Total : {order?.amount?.toFixed(2)} €</Text>
-
-                {qrCodeUrl &&
+                {qrUrl &&
                     <View style={styles.qrSection}>
-                        <Image src={qrCodeUrl} style={styles.qrCode} />
+                        <Image src={qrUrl} style={styles.qrCode} />
                         <Text style={styles.qrLabel}>Scanner à l'accueil le jour de l'événement</Text>
                     </View>
                 }

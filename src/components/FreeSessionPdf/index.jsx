@@ -1,7 +1,5 @@
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer"
-import QRCode from "qrcode/lib/browser"
-import { useEffect, useState } from "react"
-import logo from "../../assets/images/logo_e_simracing.png"
+import logo from "../../assets/images/logoSite2.png"
 
 const styles = StyleSheet.create({
     page: { padding: 40, fontFamily: "Helvetica" },
@@ -18,26 +16,16 @@ const styles = StyleSheet.create({
     qrLabel: { fontSize: 10, marginTop: 8, textAlign: "center", color: "#666" }
 })
 
-export const FreeSessionPdf = ({ freeSessionData, user }) => {
-    const [qrUrl, setQrUrl] = useState(null)
-
-    useEffect(() => {
-        if (!freeSessionData?.booking_id) return
-        QRCode.toDataURL(`${import.meta.env.VITE_APP_URL}/admin/booking/${freeSessionData.booking_id}`)
-            .then(url => setQrUrl(url))
-    }, [freeSessionData])
-
+export const FreeSessionPdf = ({ freeSessionData, user, qrUrl }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.logoContainer}>
                     <Image src={logo} style={styles.logo} />
                 </View>
-
                 <Text style={styles.title}>Elsass SimRacing</Text>
-                <Text style={styles.subtitle}>Session offerte — Membre Club SimRacing</Text>
-                <Text style={styles.badge}>★ Avantage membre mensuel</Text>
-
+                <Text style={styles.subtitle}>Session offerte – Membre Club SimRacing</Text>
+                <Text style={styles.badge}>Avantage membre mensuel</Text>
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Détails de la session</Text>
                     <Text style={styles.row}>Date : {freeSessionData?.date}</Text>
@@ -46,13 +34,11 @@ export const FreeSessionPdf = ({ freeSessionData, user }) => {
                     <Text style={styles.row}>Pilotes : {freeSessionData?.pilots}</Text>
                     <Text style={styles.row}>Prix : Gratuit</Text>
                 </View>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Membre</Text>
                     <Text style={styles.row}>{user?.firstname} {user?.lastname}</Text>
                     <Text style={styles.row}>{user?.email}</Text>
                 </View>
-
                 {qrUrl &&
                     <View style={styles.qrSection}>
                         <Image src={qrUrl} style={styles.qrCode} />

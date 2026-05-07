@@ -1,7 +1,5 @@
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer"
-import QRCode from "qrcode/lib/browser"
-import { useEffect, useState } from "react"
-import logo from "../../assets/images/logo_e_simracing.png"
+import logo from "../../assets/images/logoSite2.png"
 
 const styles = StyleSheet.create({
     page: { padding: 40, fontFamily: "Helvetica" },
@@ -17,16 +15,8 @@ const styles = StyleSheet.create({
     logo: { width: 120, marginBottom: 20, alignSelf: "center" }
 })
 
-export const OrderPdf = ({ orders, reservation, vouchers }) => {
-    const [qrCodeUrl, setQrCodeUrl] = useState(null)
+export const OrderPdf = ({ orders, reservation, vouchers, qrUrl }) => {
     const order = orders?.[0]
-
-    useEffect(() => {
-        if (!reservation) return
-        const qrData = `${import.meta.env.VITE_APP_URL}/admin/booking/${reservation.booking_id}`
-        QRCode.toDataURL(qrData).then(url => setQrCodeUrl(url))
-    }, [reservation])
-
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -34,7 +24,6 @@ export const OrderPdf = ({ orders, reservation, vouchers }) => {
                     <Image src={logo} style={styles.logo} />
                 </View>
                 <Text style={styles.title}>Elsass SimRacing</Text>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Informations commande</Text>
                     <Text style={styles.row}>Commande n°: {order?.order_number}</Text>
@@ -42,7 +31,6 @@ export const OrderPdf = ({ orders, reservation, vouchers }) => {
                     <Text style={styles.row}>Client: {order?.firstname} {order?.lastname}</Text>
                     <Text style={styles.row}>Statut: {order?.is_member === 1 ? "Membre" : "Non membre"}</Text>
                 </View>
-
                 {reservation &&
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Réservation</Text>
@@ -53,24 +41,21 @@ export const OrderPdf = ({ orders, reservation, vouchers }) => {
                         <Text style={styles.row}>Prix: {reservation.price_each?.toFixed(2)}€</Text>
                     </View>
                 }
-
                 {vouchers?.length > 0 &&
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Bons cadeaux</Text>
                         {vouchers.map((v, index) =>
                             <View key={index}>
                                 <Text style={styles.row}>Destinataire: {v.recipient_name}</Text>
-                                <Text style={styles.row}>Durée: {v.duration_minutes} minutes — Prix: {v.price_each?.toFixed(2)}€</Text>
+                                <Text style={styles.row}>Durée: {v.duration_minutes} minutes – Prix: {v.price_each?.toFixed(2)}€</Text>
                             </View>
                         )}
                     </View>
                 }
-
                 <Text style={styles.total}>Total: {order?.amount?.toFixed(2)}€</Text>
-
-                {qrCodeUrl &&
+                {qrUrl &&
                     <View style={styles.qrSection}>
-                        <Image src={qrCodeUrl} style={styles.qrCode} />
+                        <Image src={qrUrl} style={styles.qrCode} />
                         <Text style={styles.qrLabel}>Scanner à l'accueil</Text>
                     </View>
                 }

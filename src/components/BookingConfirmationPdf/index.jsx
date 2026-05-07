@@ -1,7 +1,5 @@
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer"
-import QRCode from "qrcode/lib/browser"
-import { useEffect, useState } from "react"
-import logo from "../../assets/images/logo_e_simracing.png"
+import logo from "../../assets/images/logoSite2.png"
 
 const styles = StyleSheet.create({
     page: { padding: 40, fontFamily: "Helvetica" },
@@ -18,15 +16,7 @@ const styles = StyleSheet.create({
     qrLabel: { fontSize: 10, marginTop: 8, textAlign: "center", color: "#666" }
 })
 
-export const BookingConfirmationPdf = ({ bookingData, user }) => {
-    const [qrUrl, setQrUrl] = useState(null)
-
-    useEffect(() => {
-        if (!bookingData?.booking_id) return
-        QRCode.toDataURL(`${import.meta.env.VITE_APP_URL}/admin/booking/${bookingData.booking_id}`)
-            .then(url => setQrUrl(url))
-    }, [bookingData])
-
+export const BookingConfirmationPdf = ({ bookingData, user, qrUrl }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -35,7 +25,7 @@ export const BookingConfirmationPdf = ({ bookingData, user }) => {
                 </View>
                 <Text style={styles.title}>Elsass SimRacing</Text>
                 <Text style={styles.subtitle}>Confirmation de réservation</Text>
-                <Text style={styles.badge}>⚠ Paiement à régler sur place</Text>
+                <Text style={styles.badge}>Paiement à régler sur place</Text>
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Détails de la session</Text>
                     <Text style={styles.row}>Date : {bookingData?.date}</Text>

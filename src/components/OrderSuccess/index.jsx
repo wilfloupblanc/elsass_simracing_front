@@ -6,6 +6,8 @@ import {GiftVoucherPdf} from "../GiftVoucherPdf/index.jsx"
 import {FreeSessionPdf} from "../FreeSessionPdf/index.jsx"
 import {EventRegistrationPdf} from "../EventRegistrationPdf/index.jsx";
 import {BookingConfirmationPdf} from "../BookingConfirmationPdf/index.jsx";
+import {useEffect, useState, useMemo} from "react";
+import QRCode from "qrcode/lib/browser"
 
 export const OrderSuccess = () => {
     const {data, isLoading} = useGetLastOrderQuery()
@@ -22,9 +24,74 @@ export const OrderSuccess = () => {
     const reservation = !isEvent && !isPayOnSite
         ? data?.orders?.find(o => o.booking_id !== null && o.order_id === lastOrderId)
         : null
-    const vouchers = !isEvent && !isPayOnSite
-        ? data?.orders?.filter(o => o.booking_id === null && o.order_id === lastOrderId)
-        : []
+    const vouchers = useMemo(() => {
+        return !isEvent && !isPayOnSite
+            ? data?.orders?.filter(o => o.booking_id === null && o.order_id === lastOrderId)
+            : []
+    }, [data, isEvent, isPayOnSite, lastOrderId])
+
+    const [reservationQrUrl, setReservationQrUrl] = useState(null)
+    const [qrUrls, setQrUrls] = useState({})
+    const [eventQrUrl, setEventQrUrl] = useState(null)
+    const [bookingQrUrl, setBookingQrUrl] = useState(null)
+    const [freeSessionQrUrl, setFreeSessionQrUrl] = useState(null)
+
+    useEffect(() => {
+        if (isLoading || !reservation?.booking_id) return
+        QRCode.toDataURL(`${import.meta.env.VITE_APP_URL}/admin/booking/${reservation.booking_id}`)
+            .then(url => setReservationQrUrl(url))
+    }, [reservation, isLoading])
+
+    useEffect(() => {
+        if (isLoading || !vouchers?.length) return
+        vouchers.forEach(v => {
+            if (!v.gift_voucher_qr_code) return
+            QRCode.toDataURL(v.gift_voucher_qr_code).then(url => {
+                setQrUrls(prev => ({ ...prev, [v.gift_voucher_qr_code]: url }))
+            })
+        })
+    }, [vouchers, isLoading])
+
+    useEffect(() => {
+        if (isLoading || !eventReservation?.booking_id) return
+        QRCode.toDataURL(`${import.meta.env.VITE_APP_URL}/admin/booking/${eventReservation.booking_id}`)
+            .then(url => setEventQrUrl(url))
+    }, [eventReservation, isLoading])
+
+    useEffect(() => {
+        if (isLoading || !bookingData?.booking_id) return
+        QRCode.toDataURL(`${import.meta.env.VITE_APP_URL}/admin/booking/${bookingData.booking_id}`)
+            .then(url => setBookingQrUrl(url))
+    }, [bookingData, isLoading])
+
+    useEffect(() => {
+        if (isLoading || !freeSessionData?.booking_id) return
+        QRCode.toDataURL(`${import.meta.env.VITE_APP_URL}/admin/booking/${freeSessionData.booking_id}`)
+            .then(url => setFreeSessionQrUrl(url))
+    }, [freeSessionData, isLoading])
+
+    const freeSessionPdfDoc = useMemo(() => (
+        <FreeSessionPdf freeSessionData={freeSessionData} user={locationState?.user} qrUrl={freeSessionQrUrl} />
+    ), [freeSessionQrUrl])
+
+    const orderPdfDoc = useMemo(() => (
+        <OrderPdf orders={data?.orders} reservation={reservation} vouchers={vouchers} qrUrl={reservationQrUrl} />
+    ), [reservationQrUrl, data?.orders, reservation, vouchers])
+
+    const eventPdfDoc = useMemo(() => (
+        <EventRegistrationPdf eventReservation={eventReservation} order={data?.orders?.[0]} qrUrl={eventQrUrl} />
+    ), [eventQrUrl])
+
+    const bookingPdfDoc = useMemo(() => (
+        <BookingConfirmationPdf bookingData={bookingData} user={locationState?.user} qrUrl={bookingQrUrl} />
+    ), [bookingQrUrl])
+
+    const voucherPdfDocs = useMemo(() => (
+        vouchers?.map(v => ({
+            voucher: v,
+            doc: <GiftVoucherPdf voucher={v} order={data?.orders?.[0]} qrUrl={qrUrls[v.gift_voucher_qr_code]} />
+        }))
+    ), [qrUrls, vouchers])
 
     return (
         <>
@@ -44,7 +111,7 @@ export const OrderSuccess = () => {
                     <p>Heure: {freeSessionData.time}</p>
                     <p>Durée: {freeSessionData.duration} minutes</p>
                     <p>Nombre de pilote(s): {freeSessionData.pilots}</p>
-                    <p>Session membre offerte — Gratuit</p>
+                    <p>Session membre offerte – Gratuit</p>
                 </section>
             }
 
@@ -65,7 +132,7 @@ export const OrderSuccess = () => {
                     <h2>Inscription événement</h2>
                     <p>Événement : {eventReservation.event_title}</p>
                     <p>Date : {new Date(eventReservation.event_date).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}</p>
-                    <p>Horaires : {eventReservation.event_start_time?.slice(0, 5)} — {eventReservation.event_end_time?.slice(0, 5)}</p>
+                    <p>Horaires : {eventReservation.event_start_time?.slice(0, 5)} – {eventReservation.event_end_time?.slice(0, 5)}</p>
                     <p>Total : {data.orders[0].amount.toFixed(2)} €</p>
                 </section>
             )}
@@ -83,47 +150,57 @@ export const OrderSuccess = () => {
 
             {isFreeSession && freeSessionData &&
                 <PDFDownloadLink
-                    document={<FreeSessionPdf freeSessionData={freeSessionData} user={locationState?.user} />}
+                    document={freeSessionPdfDoc}
                     fileName={`session-gratuite-${freeSessionData.date}.pdf`}
                 >
-                    <p>Télécharger mon bon de session gratuite</p>
+                    {({ loading }) => (
+                        <p>{loading || !freeSessionQrUrl ? "Génération en cours..." : "Télécharger mon bon de session gratuite"}</p>
+                    )}
                 </PDFDownloadLink>
             }
 
-            {!isEvent && !isPayOnSite && reservation && !isFreeSession && vouchers?.length > 0 && vouchers.map((v, index) =>
+            {!isEvent && !isPayOnSite && !isFreeSession && voucherPdfDocs?.length > 0 && voucherPdfDocs.map((item, index) =>
                 <PDFDownloadLink
                     key={index}
-                    document={<GiftVoucherPdf voucher={v} order={data.orders[0]} />}
-                    fileName={`bon-cadeau-${v.recipient_name}-${v.gift_voucher_qr_code}.pdf`}
+                    document={item.doc}
+                    fileName={`bon-cadeau-${item.voucher.recipient_name}-${item.voucher.gift_voucher_qr_code}.pdf`}
                 >
-                    <p>Télécharger le bon cadeau — {v.recipient_name}</p>
+                    {({ loading }) => (
+                        <p>{loading || !qrUrls[item.voucher.gift_voucher_qr_code] ? "Génération en cours..." : `Télécharger le bon cadeau – ${item.voucher.recipient_name}`}</p>
+                    )}
                 </PDFDownloadLink>
             )}
 
             {!isEvent && !isPayOnSite && !isLoading && data?.orders?.[0] &&
                 <PDFDownloadLink
-                    document={<OrderPdf orders={data.orders} reservation={reservation} vouchers={vouchers} />}
+                    document={orderPdfDoc}
                     fileName={`facture-${data.orders[0].order_number}`}
                 >
-                    <p>Télécharger la facture</p>
+                    {({ loading }) => (
+                        <p>{loading || (reservation && !reservationQrUrl) ? "Génération en cours..." : "Télécharger la facture"}</p>
+                    )}
                 </PDFDownloadLink>
             }
 
             {isEvent && eventReservation && !isLoading && data?.orders?.[0] && (
                 <PDFDownloadLink
-                    document={<EventRegistrationPdf eventReservation={eventReservation} order={data.orders[0]} />}
+                    document={eventPdfDoc}
                     fileName={`inscription-evenement-${eventReservation.event_title}-${data.orders[0].order_number}.pdf`}
                 >
-                    <p>Télécharger ma confirmation d'inscription</p>
+                    {({ loading }) => (
+                        <p>{loading || !eventQrUrl ? "Génération en cours..." : "Télécharger ma confirmation d'inscription"}</p>
+                    )}
                 </PDFDownloadLink>
             )}
 
             {isPayOnSite && !isFreeSession && bookingData &&
                 <PDFDownloadLink
-                    document={<BookingConfirmationPdf bookingData={bookingData} user={locationState?.user} />}
+                    document={bookingPdfDoc}
                     fileName={`reservation-${bookingData.date}-${bookingData.time}.pdf`}
                 >
-                    <p>Télécharger ma confirmation de réservation</p>
+                    {({ loading }) => (
+                        <p>{loading || !bookingQrUrl ? "Génération en cours..." : "Télécharger ma confirmation de réservation"}</p>
+                    )}
                 </PDFDownloadLink>
             }
         </>

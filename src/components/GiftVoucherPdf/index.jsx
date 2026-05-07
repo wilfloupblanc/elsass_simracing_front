@@ -1,7 +1,5 @@
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer"
-import QRCode from "qrcode/lib/browser"
-import { useEffect, useState } from "react"
-import logo from "../../assets/images/logo_e_simracing.png"
+import logo from "../../assets/images/logoSite2.png"
 
 const styles = StyleSheet.create({
     page: { padding: 40, fontFamily: "Helvetica" },
@@ -17,14 +15,7 @@ const styles = StyleSheet.create({
     logo: { width: 120, marginBottom: 20, alignSelf: "center" }
 })
 
-export const GiftVoucherPdf = ({ voucher, order }) => {
-    const [qrUrl, setQrUrl] = useState(null)
-
-    useEffect(() => {
-        if (!voucher?.gift_voucher_qr_code) return
-        QRCode.toDataURL(voucher.gift_voucher_qr_code).then(url => setQrUrl(url))
-    }, [voucher])
-
+export const GiftVoucherPdf = ({ voucher, order, qrUrl }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -33,25 +24,21 @@ export const GiftVoucherPdf = ({ voucher, order }) => {
                 </View>
                 <Text style={styles.title}>Elsass SimRacing</Text>
                 <Text style={styles.subtitle}>Bon cadeau</Text>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Destinataire</Text>
                     <Text style={styles.row}>Nom: {voucher?.recipient_name}</Text>
                     <Text style={styles.row}>Email: {voucher?.recipient_email}</Text>
                 </View>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Session</Text>
                     <Text style={styles.row}>Durée: {voucher?.duration_minutes} minutes</Text>
                     <Text style={styles.row}>Valeur: {voucher?.price_each?.toFixed(2)}€</Text>
                 </View>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Offert par</Text>
                     <Text style={styles.row}>{order?.firstname} {order?.lastname}</Text>
                     <Text style={styles.row}>Le: {new Date(order?.created_at).toLocaleDateString('fr-FR')}</Text>
                 </View>
-
                 {qrUrl &&
                     <View style={styles.qrSection}>
                         <Image src={qrUrl} style={styles.qrCode} />
