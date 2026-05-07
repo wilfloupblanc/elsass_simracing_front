@@ -47,7 +47,7 @@ export const subscriptionApiSlice = createApi({
                 body: { plan }
             }),
             invalidatesTags: ["subscription"]
-        }),
+        })
     })
 })
 export const {

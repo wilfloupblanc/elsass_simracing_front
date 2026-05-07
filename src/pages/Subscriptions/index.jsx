@@ -1,4 +1,4 @@
-import {CheckIcon, MinusIcon} from "@phosphor-icons/react";
+import {CheckIcon, MinusIcon, XIcon} from "@phosphor-icons/react";
 import {useNavigate} from "react-router";
 import {
     useChangePlanMutation,
@@ -132,11 +132,15 @@ export const Subscriptions = () => {
                         <p>Accès au championnat annuel <span>spécial membre</span></p>
                     </div>
                     <div className="none">
-                        <span className="icon-wrapper"><MinusIcon size={32} /></span>
+                        <span className="icon-wrapper"><XIcon size={32}  className="text-error"/></span>
                         <p>Accès aux tarifs réduits sur toutes les sessions</p>
                     </div>
 
                     <PlanButton plan="STARTER" label="Choisir STARTER" {...planButtonProps} />
+
+                    <div className="engagement">
+                        <p>Sans engagement</p>
+                    </div>
                 </article>
 
                 <article className="subscriptions__container--club popular">
@@ -168,6 +172,9 @@ export const Subscriptions = () => {
                     </div>
 
                     <PlanButton plan="PLUS" label="Choisir PLUS" {...planButtonProps} />
+                    <div className="engagement">
+                        <p>Sans engagement</p>
+                    </div>
                 </article>
 
                 <article className="subscriptions__container--club">
@@ -196,6 +203,10 @@ export const Subscriptions = () => {
                     </div>
 
                     <PlanButton plan="ULTRA" label="Choisir ULTRA" {...planButtonProps} />
+
+                    <div className="engagement">
+                        <p>Sans engagement</p>
+                    </div>
                 </article>
 
                 <article className="subscriptions__container--member-prices">

@@ -34,6 +34,8 @@ export const Profile = () => {
     const bookings = bookingsData?.bookings ?? []
     const [cancelBooking] = useCancelBookingMutation()
 
+    console.log(bookings)
+
     const isPendingCancellation = subscription?.status === "pending_cancellation"
 
     const now = new Date()
@@ -151,6 +153,11 @@ export const Profile = () => {
                             <p className="profile__card--row">
                                 <span>Abonnement</span>
                                 <span className="text-success">{currentPlan?.plan}</span>
+                            </p>
+
+                            <p className="profile__card--row">
+                                <span>Sessions gratuites restantes</span>
+                                <span className="text-success">{subscription?.free_sessions_remaining ?? 0} disponible{subscription?.free_sessions_remaining > 1 ? 's' : ''}</span>
                             </p>
 
                             {subscription?.pending_plan && (
