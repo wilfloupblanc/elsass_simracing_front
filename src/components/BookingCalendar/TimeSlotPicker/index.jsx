@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import "./TimeSlotPicker.scss"
 
-export const TimeSlotPicker = ({slots, selectedSlot, onSlotSelect, pilotsCount}) => {
+export const TimeSlotPicker = ({ slots, selectedSlot, onSlotSelect, pilotsCount, blockedSlotIds = new Set() }) => {
     const [activeTab, setActiveTab] = useState("matin")
 
     useEffect(() => {
@@ -32,19 +32,21 @@ export const TimeSlotPicker = ({slots, selectedSlot, onSlotSelect, pilotsCount})
                         : <div className="timeslot__grid">
                             {slots[activeTab].map((slot, index) => {
                                 const isFull = slot.slots_remaining < pilotsCount
-
+                                const isBlocked = blockedSlotIds.has(slot.id)
+                                const isDisabled = isFull || isBlocked
                                 return (
                                     <button
                                         key={index}
-                                        onClick={() => !isFull && onSlotSelect(slot)}
-                                        disabled={isFull}
+                                        onClick={() => !isDisabled && onSlotSelect(slot)}
+                                        disabled={isDisabled}
                                         className={`timeslot__slot 
                                             ${slot.time === selectedSlot?.time ? 'timeslot__slot--selected' : ''} 
                                             ${isFull ? 'timeslot__slot--full' : ''}
+                                            ${isBlocked ? 'timeslot__slot--blocked' : ''}
                                         `}
                                     >
                                         <span>{slot.time}</span>
-                                        <span>{isFull ? 'Complet' : `Dispo: ${slot.slots_remaining}`}</span>
+                                        <span>{isFull ? 'Complet' : isBlocked ? 'Indisponible' : `Dispo: ${slot.slots_remaining}`}</span>
                                     </button>
                                 )
                             })}

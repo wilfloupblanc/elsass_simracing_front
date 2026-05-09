@@ -58,11 +58,20 @@
     & > span {
       color: inherit;
     }
-
     &--selected {
       background-color: black;
       color: white;
       font-weight: bold;
+    }
+    &--full {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    &--blocked {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background-color: #7a2020;
+      color: white;
     }
   }
 

@@ -12,6 +12,23 @@ import {useAuthenticated} from "../../hooks/useAuthenticated.js";
 import {useDispatch} from "react-redux";
 import {useNavigate, useLocation} from "react-router";
 
+const toMinutes = (time) => {
+    const [h, m] = time.split(':').map(Number)
+    return h * 60 + m
+}
+
+const getBlockedStartSlots = (allSlots, durationMinutes, pilotsCount) => {
+    const slotsNeeded = durationMinutes / 15
+    const blockedIds = new Set()
+    allSlots.forEach((slot, index) => {
+        const window = allSlots.slice(index, index + slotsNeeded)
+        const hasGap = window.some((s, i) => i > 0 && toMinutes(s.time) - toMinutes(window[i - 1].time) !== 15)
+        const isFull = window.some(s => s.slots_remaining < pilotsCount)
+        if (hasGap || isFull) blockedIds.add(slot.id)
+    })
+    return blockedIds
+}
+
 export const BookingCalendar = () => {
     const todayDate = new Date()
     const today = `${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`
@@ -79,6 +96,7 @@ export const BookingCalendar = () => {
         setSelectedSessionId(id)
         const newSession = session?.sessions?.find(s => s.id === id)
         setPlayer(newSession?.min_pilots ?? 1)
+        setSelectedSlot(null)
     }
 
     const handleSlotSelect = (slot) => {
@@ -110,6 +128,26 @@ export const BookingCalendar = () => {
             soir: evening.map(slot => ({time: slot.start_time.slice(0, 5), slots_remaining: slot.slots_remaining, id: slot.id}))
         } : undefined
     }, [morning, afternoon, evening, isSuccess, availabilitiesGrid])
+
+    const allSlotsForDay = useMemo(() => [
+        ...(slots?.matin ?? []),
+        ...(slots?.apresmidi ?? []),
+        ...(slots?.soir ?? []),
+    ], [slots])
+
+    const blockedSlotIds = useMemo(() => {
+        if (!selectedDuration) return new Set()
+        return getBlockedStartSlots(allSlotsForDay, selectedDuration, player)
+    }, [allSlotsForDay, selectedDuration, player])
+
+    const blockedSessionIds = useMemo(() => {
+        if (!selectedSlot || !session?.sessions) return new Set()
+        return new Set(
+            session.sessions
+                .filter(s => getBlockedStartSlots(allSlotsForDay, s.duration_minutes, player).has(selectedSlot.id))
+                .map(s => s.id)
+        )
+    }, [selectedSlot, session, allSlotsForDay, player])
 
     const availableDatesSet = useMemo(() => {
         if (!isSuccess) return new Set()
@@ -143,7 +181,9 @@ export const BookingCalendar = () => {
         }
     }
 
-    const isReservationValid = selectedSlot !== null && selectedSlot?.slots_remaining >= player
+    const isReservationValid = selectedSlot !== null
+        && selectedSlot?.slots_remaining >= player
+        && !blockedSlotIds.has(selectedSlot.id)
 
     return (
         <section className="booking-calendar">
@@ -153,6 +193,7 @@ export const BookingCalendar = () => {
                 selectedDuration={selectedDuration}
                 selectedSessionId={selectedSessionId}
                 onDurationSelect={handleDurationSelect}
+                blockedSessionIds={blockedSessionIds}
             />
 
             <section className="booking-calendar__content--number">
@@ -183,6 +224,7 @@ export const BookingCalendar = () => {
                             selectedSlot={selectedSlot}
                             onSlotSelect={handleSlotSelect}
                             pilotsCount={player}
+                            blockedSlotIds={blockedSlotIds}
                         />
                     }
                     <button
