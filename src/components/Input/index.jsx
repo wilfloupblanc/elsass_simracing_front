@@ -2,7 +2,7 @@ import "./Input.scss"
 
 export const Input = ({inputName, value, inputType, labelText, inputComplete, onChange, suffix, ...props}) => {
     return (
-        <>
+        <div className="input-field">
             <label htmlFor={inputName} className="text-secondary">
                 {labelText}
             </label>
@@ -18,6 +18,6 @@ export const Input = ({inputName, value, inputType, labelText, inputComplete, on
                 />
                 {suffix && <span className="input-suffix">{suffix}</span>}
             </div>
-        </>
+        </div>
     )
 }

@@ -58,23 +58,25 @@ export const Contact = () => {
                     />
                 </div>
 
-                <Input
-                    inputName="email"
-                    labelText="E-mail"
-                    inputType="email"
-                    inputComplete="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
+                <div className="contact-row">
+                    <Input
+                        inputName="email"
+                        labelText="E-mail"
+                        inputType="email"
+                        inputComplete="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
 
-                <Input
-                    inputName="phone"
-                    labelText="N° de téléphone"
-                    inputType="tel"
-                    inputComplete="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                />
+                    <Input
+                        inputName="phone"
+                        labelText="N° tel"
+                        inputType="tel"
+                        inputComplete="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                    />
+                </div>
 
                 <div className="subject-row text-secondary">
                     <label>Objet :</label>

@@ -1,14 +1,19 @@
-import {NavLink} from "react-router";
+import {NavLink, useLocation} from "react-router";
 import {HouseIcon, IdentificationBadgeIcon, ListIcon, TicketIcon, CalendarDotsIcon} from "@phosphor-icons/react";
 
 import "./Navigation.scss"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAuthenticated} from "../../hooks/useAuthenticated.js";
 
 export const Navigation = () => {
 
     const [open, setOpen] = useState(false)
     const {isAuth} = useAuthenticated()
+    const location = useLocation()
+
+    useEffect(() => {
+        setOpen(false)
+    }, [location.pathname])
 
 
     return (

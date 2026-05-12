@@ -27,10 +27,23 @@
     gap: 1.5rem;
     padding: 0 2rem;
 
-    .name-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+    .name-row, .contact-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input {
+        border: none;
+      }
+
+      @include desktop {
+        flex-direction: row;
+        gap: 1.5rem;
+
+        & > * {
+          flex: 1;
+        }
+      }
     }
 
     .subject-row {

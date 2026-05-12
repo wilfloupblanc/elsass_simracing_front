@@ -3,16 +3,22 @@
 @use "../../styles/abstracts/normalize" as *;
 @use "../../styles/abstracts/variables" as *;
 
+.input-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+}
+
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-
   input {
     width: 100%;
     padding-right: 2.5rem;
+    border-radius: 0.5rem;
   }
-
   .input-suffix {
     position: absolute;
     right: 0.75rem;
@@ -22,7 +28,6 @@
     align-items: center;
   }
 }
-
 .password-toggle {
   background: none;
   border: none;
@@ -31,7 +36,6 @@
   color: inherit;
   display: flex;
   align-items: center;
-
   &:focus-visible {
     outline: 2px solid currentColor;
     border-radius: 2px;

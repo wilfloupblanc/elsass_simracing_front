@@ -48,6 +48,7 @@ export const Header = () => {
     }, [isSuccess])
 
     useEffect(() => {
+        setOpen(false)
         setCartOpen(false)
     }, [location.pathname])
 
