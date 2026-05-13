@@ -23,9 +23,9 @@ export const TimeSlotPicker = ({ slots, selectedSlot, onSlotSelect, pilotsCount,
             {slots &&
                 <div className="timeslot bg-third">
                     <div className="timeslot__tabs">
-                        <button onClick={() => setActiveTab("matin")} className={`timeslot__tab ${activeTab === "matin" ? 'timeslot__tab--active' : ''}`}>Matin</button>
-                        <button onClick={() => setActiveTab("apresmidi")} className={`timeslot__tab ${activeTab === "apresmidi" ? 'timeslot__tab--active' : ''}`}>Après-midi</button>
-                        <button onClick={() => setActiveTab("soir")} className={`timeslot__tab ${activeTab === "soir" ? 'timeslot__tab--active' : ''}`}>Soir</button>
+                        <button aria-label="select morning button" onClick={() => setActiveTab("matin")} className={`timeslot__tab ${activeTab === "matin" ? 'timeslot__tab--active' : ''}`}>Matin</button>
+                        <button aria-label="select afternoon button" onClick={() => setActiveTab("apresmidi")} className={`timeslot__tab ${activeTab === "apresmidi" ? 'timeslot__tab--active' : ''}`}>Après-midi</button>
+                        <button aria-label="select evening button" onClick={() => setActiveTab("soir")} className={`timeslot__tab ${activeTab === "soir" ? 'timeslot__tab--active' : ''}`}>Soir</button>
                     </div>
                     {slots[activeTab].length === 0
                         ? <p className="text-secondary">Créneaux indisponible</p>
@@ -44,6 +44,7 @@ export const TimeSlotPicker = ({ slots, selectedSlot, onSlotSelect, pilotsCount,
                                             ${isFull ? 'timeslot__slot--full' : ''}
                                             ${isBlocked ? 'timeslot__slot--blocked' : ''}
                                         `}
+                                        aria-label={slot}
                                     >
                                         <span>{slot.time}</span>
                                         <span>{isFull ? 'Complet' : isBlocked ? 'Indisponible' : `Dispo: ${slot.slots_remaining}`}</span>

@@ -112,6 +112,7 @@ export const EventCard = ({ event, user, isAuth, today }) => {
                                 value={selectedVehicle}
                                 onChange={e => setSelectedVehicle(e.target.value)}
                                 className="events__vehicle-select bg-secondary text-secondary"
+                                aria-label="vehicle select"
                             >
                                 {vehicles.map((v, i) => (
                                     <option key={i} value={v}>{v}</option>

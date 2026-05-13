@@ -230,6 +230,7 @@ export const BookingCalendar = () => {
                     <button
                         disabled={!isReservationValid}
                         onClick={handleReserve}
+                        aria-label="Reserve button"
                         className={`bg-third text-secondary ${!isReservationValid ? 'disabled' : ''}`}
                     >
                         Réserver

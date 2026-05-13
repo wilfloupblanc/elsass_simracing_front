@@ -3,10 +3,7 @@ import { Maintenance } from "../../pages/Maintenance"
 
 export const MaintenanceGuard = ({ children }) => {
     const { isMaintenance, isLoading } = useMaintenanceStatus()
-
-    if (isLoading) return null
-
+    if (isLoading) return children
     if (isMaintenance) return <Maintenance />
-
     return children
 }

@@ -1,11 +1,12 @@
-import video_promo from "../../assets/videos/video_promo.mov"
-//import video_desktop from "../../assets/videos/video_test-desktop.mp4"
-import wheel from "../../assets/images/volant.png"
+import video_promo_webm from "../../assets/videos/video_promo.webm"
+import video_promo_mp4 from "../../assets/videos/video_promo.mp4"
+import wheelLrg from "../../assets/images/volant.webp"
+import wheelMd from "../../assets/images/volant1280.webp"
 import sim from "../../assets/images/sim.webp"
-import gt3 from "../../assets/images/gt3.png"
-import formula from "../../assets/images/formula.png"
-import hypercar from "../../assets/images/hypercar.png"
-import drift from "../../assets/images/drift.png"
+import gt3 from "../../assets/images/gt3.webp"
+import formula from "../../assets/images/formula.webp"
+import hypercar from "../../assets/images/hypercar.webp"
+import drift from "../../assets/images/drift.webp"
 import "./Home.scss"
 import {ArrowCircleDownIcon, GreaterThanIcon} from "@phosphor-icons/react";
 import {NavLink} from "react-router";
@@ -15,14 +16,23 @@ export const Home = () => {
     return (
         <main className="home">
             <section className="videomobile">
-                <video src={video_promo} autoPlay={true} loop={true} muted={true}></video>
+                <video autoPlay loop muted playsInline>
+                    <source src={video_promo_webm} type="video/webm" />
+                    <source src={video_promo_mp4} type="video/mp4" />
+                </video>
                 <a href="#promotion" aria-label="descends vers la section de promotion du SimRacing">
                     <ArrowCircleDownIcon size={50} className="text-secondary"/>
                 </a>
             </section>
             <section className="videodesktop">
-                {/*<video src={video_desktop} autoPlay={true} loop={true} muted={true}></video>*/}
-                <img src={wheel} alt="image d'un volant de simulateur"/>
+                <img
+                    src={wheelLrg}
+                     srcSet={` ${wheelMd} 1280w, ${wheelLrg} 1920w`}
+                     sizes="100vw"
+                     width={1920}
+                     height={620}
+                     alt="image d'un volant de simulateur"
+                />
             </section>
             <section className="promotion" id="promotion">
                 <img src={sim} alt="Image simulateur noir et blanc"/>

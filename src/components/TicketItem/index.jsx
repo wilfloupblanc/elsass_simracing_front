@@ -12,11 +12,12 @@ export const TicketItem = ({label, price, quantity, setQuantity}) => {
                 <button
                     onClick={() => setQuantity(quantity - 1)}
                     disabled={quantity === 0}
+                    aria-label="Minus button"
                 >
                     <MinusIcon size={32} />
                 </button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)}>
+                <button onClick={() => setQuantity(quantity + 1)} aria-label="Plus button">
                     <PlusIcon size={32} />
                 </button>
             </div>

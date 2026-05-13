@@ -23,13 +23,14 @@ export const CalendarGrid = ({currentMonth, currentYear, today, selectedDate, on
                 <button
                     onClick={() => onMonthChange(-1)}
                     disabled={currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear()}
-
+                    aria-label="less month button"
                 >
                     <LessThanIcon size={16}  className="text-secondary"/>
                 </button>
                 <span className="text-secondary">{displayMonth}</span>
                 <button
                     onClick={() => onMonthChange(1)}
+                    aria-label="more month button"
                 >
                     <GreaterThanIcon size={16}  className="text-secondary"/>
                 </button>
@@ -66,6 +67,7 @@ export const CalendarGrid = ({currentMonth, currentYear, today, selectedDate, on
                                     ${cellDate < today ? `calendar__cell--past` : ''}
                                 `}
                                 disabled={cellDate < today || isUnavailable}
+                                aria-label={cellDate}
                             >
                                 {day}
                             </button>

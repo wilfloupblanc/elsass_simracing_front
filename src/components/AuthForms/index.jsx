@@ -11,7 +11,7 @@ export const AuthForms = () => {
     const dispatch = useDispatch();
 
     return (
-        <Modale forceOpen={isModalOpen} onClose={() => dispatch(setIsModalOpen({isModalOpen: false}))} onOpen={() => dispatch(setIsLoginModal({isLoginModal: true}))} openBtnText={<UserCircleIcon size={32} className="text-secondary"/>}>
+        <Modale forceOpen={isModalOpen} onClose={() => dispatch(setIsModalOpen({isModalOpen: false}))} onOpen={() => dispatch(setIsLoginModal({isLoginModal: true}))} openBtnText={<UserCircleIcon size={32} aria-label="button-connection" className="text-secondary"/>}>
             {({ onClose }) => (
                 <>
                     {login && <LoginForm toggle={() => dispatch(toggleIsLoginModal())} onClose={onClose} />}

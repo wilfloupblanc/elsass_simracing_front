@@ -16,7 +16,8 @@ export const authApiSlice = createApi({
         getAuthenticatedUser: build.query({
             method: "GET",
             query: () => "/user",
-            providesTags: ["auth"]
+            providesTags: ["auth"],
+            keepUnusedDataFor: 300,
         }),
         signOut: build.mutation({
             query: () => ({

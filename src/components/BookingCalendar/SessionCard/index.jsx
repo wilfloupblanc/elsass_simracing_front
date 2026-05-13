@@ -13,6 +13,7 @@ export const SessionCard = ({ sessions, selectedSessionId, onDurationSelect, isM
                             key={index}
                             onClick={() => !isBlocked && onDurationSelect(session?.duration_minutes, session?.id)}
                             disabled={isBlocked}
+                            aria-label={`${session?.name}`}
                             className={`session-card__duration-btn 
                                 ${selectedSessionId === session?.id ? 'active' : ''}
                                 ${isBlocked ? 'session-card__duration-btn--blocked' : ''}

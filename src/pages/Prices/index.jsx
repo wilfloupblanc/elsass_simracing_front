@@ -2,12 +2,12 @@ import {useState} from "react";
 import {createPortal} from "react-dom";
 import {useNavigate} from "react-router";
 import {useGetAllSessionsQuery} from "../../store/ApiSlice/sessionApiSlice.js";
-import simugt from "../../assets/images/simugt.jpg"
+import simugt from "../../assets/images/simugt.webp"
 import "./Prices.scss"
 
 export const Prices = () => {
     const navigate = useNavigate()
-    const {data} = useGetAllSessionsQuery()
+    const {data, isLoading} = useGetAllSessionsQuery()
     const sessions = data?.sessions ?? []
     const [selectedSession, setSelectedSession] = useState(null)
 
@@ -45,50 +45,71 @@ export const Prices = () => {
             </section>
 
             <section className="prices__sessions">
-                {sessions.map((session) => (
-                    <article key={session.id} className="prices__sessions--card">
-                        <div className="prices__sessions--card-img">
-                            <img src={`/assets/images/${session.image}`} alt={session.name} />
-                            <span className={`prices__sessions--card-level ${LEVEL_CLASSES[session.level] ?? ''}`}>
-                                {session.level}
-                            </span>
-                            <span className="prices__sessions--card-badge">à partir de {session.min_age} ans</span>
-                        </div>
-
-                        <div className="prices__sessions--card-body">
-                            <p className="prices__sessions--card-title">{session.name}</p>
-                            <div className="prices__sessions--card-divider" />
-                            <div className="prices__sessions--card-meta">
-                                <span>⏱ {session.duration_minutes} min</span>
-                                <span>€ {session.price_normal.toFixed(2)}€</span>
-                                <span>👤 {session.min_pilots === session.max_pilots ? session.min_pilots : `${session.min_pilots} à ${session.max_pilots}`} pilote{session.max_pilots > 1 ? 's' : ''}</span>
-                                <span>↕ {session.min_height}</span>
+                {isLoading ? (
+                    <>
+                        <div className="session-skeleton" />
+                        <div className="session-skeleton" />
+                        <div className="session-skeleton" />
+                        <div className="session-skeleton" />
+                        <div className="session-skeleton" />
+                    </>
+                ) : (
+                    sessions.map((session) => (
+                        <article key={session.id} className="prices__sessions--card">
+                            <div className="prices__sessions--card-img">
+                                <img
+                                    src={`/assets/images/${session.image}`}
+                                    alt={session.name}
+                                    width={600}
+                                    height={400}
+                                    loading="lazy"
+                                />
+                                <span className={`prices__sessions--card-level ${LEVEL_CLASSES[session.level] ?? ''}`}>
+                                    {session.level}
+                                </span>
+                                <span className="prices__sessions--card-badge">À partir de {session.min_age} ans</span>
                             </div>
-                        </div>
-
-                        <div className="prices__sessions--card-footer">
-                            <button
-                                className="prices__sessions--card-detail"
-                                onClick={() => handleOpenModal(session)}
-                            >
-                                Voir plus
-                            </button>
-                            <button
-                                className="prices__sessions--card-btn text-secondary"
-                                onClick={() => handleReserve(session.duration_minutes, session.id)}
-                            >
-                                Réserver
-                            </button>
-                        </div>
-                    </article>
-                ))}
+                            <div className="prices__sessions--card-body">
+                                <p className="prices__sessions--card-title">{session.name}</p>
+                                <div className="prices__sessions--card-divider" />
+                                <div className="prices__sessions--card-meta">
+                                    <span>⏱ {session.duration_minutes} min</span>
+                                    <span>💶 {session.price_normal.toFixed(2)}€</span>
+                                    <span>👥 {session.min_pilots === session.max_pilots ? session.min_pilots : `${session.min_pilots} à ${session.max_pilots}`} pilote{session.max_pilots > 1 ? 's' : ''}</span>
+                                    <span>📏 {session.min_height}</span>
+                                </div>
+                            </div>
+                            <div className="prices__sessions--card-footer">
+                                <button
+                                    className="prices__sessions--card-detail"
+                                    aria-label="see more"
+                                    onClick={() => handleOpenModal(session)}
+                                >
+                                    Voir plus
+                                </button>
+                                <button
+                                    className="prices__sessions--card-btn text-secondary"
+                                    aria-label="reserve"
+                                    onClick={() => handleReserve(session.duration_minutes, session.id)}
+                                >
+                                    Réserver
+                                </button>
+                            </div>
+                        </article>
+                    ))
+                )}
             </section>
 
             {selectedSession && createPortal(
                 <div className="prices__modal-overlay" onClick={handleCloseModal}>
                     <div className="prices__modal" onClick={(e) => e.stopPropagation()}>
                         <div className="prices__modal--img">
-                            <img src={`/assets/images/${selectedSession.image}`} alt={selectedSession.name} />
+                            <img
+                                src={`/assets/images/${selectedSession.image}`}
+                                alt={selectedSession.name}
+                                width={600}
+                                height={400}
+                            />
                             <span className={`prices__modal--level ${LEVEL_CLASSES[selectedSession.level] ?? ''}`}>
                                 {selectedSession.level}
                             </span>
@@ -125,14 +146,14 @@ export const Prices = () => {
                                 <div className="prices__modal--step">
                                     <span className="prices__modal--step-dot">1</span>
                                     <div>
-                                        <p>Accueil et configuration — 10 min</p>
+                                        <p>Accueil et configuration – 10 min</p>
                                         <span>{selectedSession.intro}</span>
                                     </div>
                                 </div>
                                 <div className="prices__modal--step">
                                     <span className="prices__modal--step-dot">2</span>
                                     <div>
-                                        <p>Session de pilotage — {selectedSession.duration_minutes} min</p>
+                                        <p>Session de pilotage – {selectedSession.duration_minutes} min</p>
                                         <span>{selectedSession.details}</span>
                                     </div>
                                 </div>

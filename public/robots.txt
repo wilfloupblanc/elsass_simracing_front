@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /profile/
+Disallow: /order/
+Disallow: /subscription/
+
+Sitemap: https://elsass-simracing.fr/sitemap.xml

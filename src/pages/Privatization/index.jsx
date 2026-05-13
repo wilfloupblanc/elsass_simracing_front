@@ -1,7 +1,7 @@
 import {NavLink} from "react-router";
 import {GreaterThanIcon} from "@phosphor-icons/react";
-import enterprise from "@assets/images/entreprises.png"
-import particular from "@assets/images/particuliers.jpg"
+import enterprise from "@assets/images/entreprises.webp"
+import particular from "@assets/images/particuliers.webp"
 
 import "./Privatization.scss"
 

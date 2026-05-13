@@ -9,7 +9,7 @@ import {useAuthenticated} from "../../hooks/useAuthenticated.js";
 import {showToast} from "@store/slice/toastSlice.js";
 
 export const Tickets = () => {
-    const {data: sessions} = useGetAllSessionsQuery()
+    const {data: sessions, isLoading} = useGetAllSessionsQuery()
     const dispatch = useDispatch();
     const [quantities, setQuantities] = useState({})
     const {isAuth} = useAuthenticated()
@@ -53,15 +53,24 @@ export const Tickets = () => {
                 <p>Offrez l'adrénaline au volant — 15, 30, 45 ou 60 minutes de sensations pures sur nos simulateurs de course professionnels. Nos bons cadeaux nominatifs sont disponibles sans limite de quantité : parfaits pour les anniversaires, Noël, ou juste parce que certains méritent de mordre la piste. Choisissez la durée, on s'occupe du reste.</p>
             </section>
             <section className="tickets__card">
-                {sessions?.sessions?.map((ticket) => (
-                    <TicketItem
-                        key={ticket.id}
-                        label={`Ticket ${ticket.duration_minutes} minutes`}
-                        price={`${ticket.price_normal.toFixed(2)}`}
-                        quantity={quantities[ticket.id] || 0}
-                        setQuantity={(value) => handleQuantityChange(ticket.id, value)}
-                    />
-                ))}
+                {isLoading ? (
+                    <>
+                        <div className="ticket-skeleton" />
+                        <div className="ticket-skeleton" />
+                        <div className="ticket-skeleton" />
+                        <div className="ticket-skeleton" />
+                    </>
+                ) : (
+                    sessions?.sessions?.map((ticket) => (
+                        <TicketItem
+                            key={ticket.id}
+                            label={`Ticket ${ticket.duration_minutes} minutes`}
+                            price={`${ticket.price_normal.toFixed(2)}`}
+                            quantity={quantities[ticket.id] || 0}
+                            setQuantity={(value) => handleQuantityChange(ticket.id, value)}
+                        />
+                    ))
+                )}
                 <div className="addToCart">
                     <button disabled={!hasItems} onClick={handleAddToCart} className={`bg-primary text-secondary ${!hasItems ? `disabled` : ``}`}>Ajouter au panier</button>
                 </div>
@@ -69,3 +78,4 @@ export const Tickets = () => {
         </main>
     )
 }
+

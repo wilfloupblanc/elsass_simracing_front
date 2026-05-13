@@ -1,8 +1,11 @@
 import {useGetAuthenticatedUserQuery} from "../store/ApiSlice/authApiSlice.js";
 
 export const useAuthenticated = () => {
-    const {data, isLoading, isFetching, isSuccess, isError, refetch} = useGetAuthenticatedUserQuery()
-
+    const {data, isLoading, isFetching, isSuccess, isError, refetch} = useGetAuthenticatedUserQuery(undefined, {
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
+    })
     return {
         isLoading,
         isFetching,

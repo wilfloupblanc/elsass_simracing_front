@@ -3,7 +3,7 @@ import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react"
 import './PasswordHints.scss'
 
 const RULES = [
-    { key: "length",  label: "10 caractères minimum", regex: /.{8,}/  },
+    { key: "length",  label: "10 caractères minimum", regex: /.{10,}/  },
     { key: "upper",   label: "1 lettre majuscule",    regex: /[A-Z]/ },
     { key: "number",  label: "1 chiffre",             regex: /[0-9]/ },
     { key: "special", label: "1 caractère spécial",   regex: /[^A-Za-z0-9]/ },

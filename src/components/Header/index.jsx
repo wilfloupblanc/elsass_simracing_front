@@ -3,7 +3,7 @@ import {
     ShoppingCartIcon, SignOutIcon, XCircleIcon
 } from "@phosphor-icons/react";
 import {NavLink, useLocation, useNavigate} from "react-router";
-import logo from "../../assets/images/logoSite2.png"
+import logo from "../../assets/images/logoSite2.webp"
 import {useEffect, useState} from "react";
 import {useAuthenticated} from "../../hooks/useAuthenticated.js";
 import {resetApiState, useSignOutMutation} from "../../store/ApiSlice/authApiSlice.js";
@@ -88,6 +88,7 @@ export const Header = () => {
                     <NavLink to="/subscriptions">Abonnement</NavLink>
 
                     <button
+                        aria-label="button-menu"
                         onClick={() => setOpen(!open)}
                         className="menu"
                     >
@@ -114,7 +115,7 @@ export const Header = () => {
 
                     {isAuth && <SignOutIcon size={32} onClick={handleSignOut} className="text-secondary"/>}
 
-                    <button onClick={() => setCartOpen(!cartOpen)} id="btn-cart">
+                    <button onClick={() => setCartOpen(!cartOpen)} id="btn-cart" aria-label="button-cart">
                         <ShoppingCartIcon size={32} className="text-secondary cart" />
                         {totalItems > 0 &&
                             <span className="cart-badge">{totalItems}</span>
