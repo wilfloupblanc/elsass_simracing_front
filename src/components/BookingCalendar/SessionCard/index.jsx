@@ -1,6 +1,7 @@
 import "./SessionCard.scss"
 
-export const SessionCard = ({ sessions, selectedSessionId, onDurationSelect, isMember, blockedSessionIds = new Set() }) => {
+export const SessionCard = ({ sessions, selectedSessionId, onDurationSelect, isMember, memberPlan, blockedSessionIds = new Set() }) => {
+    const hasMemberPrice = isMember && memberPlan !== "STARTER"
 
     return (
         <div className="session-card">
@@ -18,12 +19,12 @@ export const SessionCard = ({ sessions, selectedSessionId, onDurationSelect, isM
                                 ${selectedSessionId === session?.id ? 'active' : ''}
                                 ${isBlocked ? 'session-card__duration-btn--blocked' : ''}
                             `}
-                                        >
+                        >
                             <span className="session-card__duration-btn__header session-header">
                                 {session?.name}
                                 <span className="session-card__duration-btn__sub">{session?.duration_minutes} min</span>
                             </span>
-                            <span>{isMember ? session?.price_member.toFixed(2) : session?.price_normal.toFixed(2)} €</span>
+                            <span>{hasMemberPrice ? session?.price_member.toFixed(2) : session?.price_normal.toFixed(2)} €</span>
                         </button>
                     )
                 })}

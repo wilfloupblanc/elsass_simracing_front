@@ -26,14 +26,15 @@ export const Checkout = () => {
     const freeSession = freeSessionData?.freeSessionsRemaining > 0
     const [useFreeSession, setUseFreeSession] = useState(false)
     const isEvent = state?.type === 'event'
+    const hasMemberPrice = authUser?.is_member === 1 && authUser?.plan !== "STARTER"
     const price = isEvent
         ? state?.event_price ?? 0
         : state
-            ? (authUser?.is_member === 1
+            ? (hasMemberPrice
                 ? session ? (session.price_member + (state.pilots - 1) * session.price_normal) : 0
                 : session ? session.price_normal * state.pilots : 0)
             : 0
-    const cartTotal = cart?.reduce((acc, item) => acc + (authUser?.is_member === 1 ? item.price_member : item.price_normal) * item.quantity, 0) ?? 0
+    const cartTotal = cart?.reduce((acc, item) => acc + (hasMemberPrice ? item.price_member : item.price_normal) * item.quantity, 0) ?? 0
     const totalCheckout = price + cartTotal
     const [deleteCartItem] = useDeleteCartItemsMutation()
 
@@ -158,7 +159,7 @@ export const Checkout = () => {
                             <p>Heure de début de session: {state.slot.time}</p>
                             <p>Durée de la session: {state.duration} Minutes</p>
                             <p>Nombre de pilote(s): {state.pilots}</p>
-                            {authUser?.is_member === 1 ? (
+                            {hasMemberPrice ? (
                                 state.pilots > 1 ? (
                                     <>
                                         <p>1 pilote (membre) : {session?.price_member.toFixed(2)} €</p>

@@ -190,6 +190,7 @@ export const BookingCalendar = () => {
             <SessionCard
                 sessions={session?.sessions}
                 isMember={authenticatedUser?.is_member === 1}
+                memberPlan={authenticatedUser?.plan}
                 selectedDuration={selectedDuration}
                 selectedSessionId={selectedSessionId}
                 onDurationSelect={handleDurationSelect}
