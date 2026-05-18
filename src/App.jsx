@@ -29,6 +29,8 @@ import {BookingConfirmation} from "./pages/BookingConfirmation/index.jsx";
 import {SubscriptionSuccess} from "./pages/SubscriptionSuccess/index.jsx";
 import {SubscriptionCancel} from "./pages/SubscriptionCancel/index.jsx";
 import {MaintenanceGuard} from "./components/MaintenanceGuard/index.jsx";
+import {ForgotPassword} from "./pages/ForgotPassword/index.jsx";
+import {ResetPassword} from "./pages/ResetPassword/index.jsx";
 
 function App() {
 
@@ -48,6 +50,8 @@ function App() {
                   <Route path="/coaching" element={<Coaching />} />
                   <Route path="/events" element={<Events />} />
                   <Route path="/booking/:id" element={<BookingConfirmation />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/order" element={<ProtectedRoutes />}>
                       <Route path="/order/checkout" element={<Checkout />}/>
                       <Route path="/order/success" element={<Success />}/>
