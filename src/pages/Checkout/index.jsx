@@ -9,6 +9,7 @@ import {useCreateBookingMutation} from "../../store/ApiSlice/bookingApiSlice.js"
 import {useEffect, useMemo, useState} from "react";
 import {useAddRecipientMutation} from "../../store/ApiSlice/cartItemRecipientApiSlice.js";
 import {useGetFreeSessionQuery} from "../../store/ApiSlice/giftVoucherApiSlice.js";
+import {useValidateDiscountCodeMutation} from "../../store/ApiSlice/discountApiSlice.js";
 
 export const Checkout = () => {
 
@@ -37,6 +38,17 @@ export const Checkout = () => {
     const cartTotal = cart?.reduce((acc, item) => acc + (hasMemberPrice ? item.price_member : item.price_normal) * item.quantity, 0) ?? 0
     const totalCheckout = price + cartTotal
     const [deleteCartItem] = useDeleteCartItemsMutation()
+    const [discountCode, setDiscountCode] = useState("")
+    const [appliedDiscount, setAppliedDiscount] = useState(null)
+    const [discountError, setDiscountError] = useState("")
+    const [validateDiscountCode, { isLoading: isValidatingDiscount }] = useValidateDiscountCodeMutation()
+    const discountAmount = appliedDiscount
+        ? appliedDiscount.type === 'percent'
+            ? (totalCheckout * appliedDiscount.value) / 100
+            : Math.min(appliedDiscount.value, totalCheckout)
+        : 0
+
+    const totalAfterDiscount = Math.max(0, totalCheckout - discountAmount)
 
     const recipientsFilled = !cart || cart.length === 0 || cart.every(item =>
         (recipients[item.id] ?? []).length >= item.quantity &&
@@ -102,7 +114,11 @@ export const Checkout = () => {
             event_title: isEvent ? state?.event_title ?? null : null,
             pilots_count: isEvent ? state?.pilots_count ?? null : null,
             selected_vehicle: isEvent ? state?.selected_vehicle ?? null : null,
+            discount_code: appliedDiscount?.code ?? null,
         })
+        if (result.error) {
+            return
+        }
         window.location.assign(result.data.url)
     }
 
@@ -118,7 +134,8 @@ export const Checkout = () => {
             pilots: state?.pilots ?? 1,
             gift_voucher_id: null,
             pay_on_site: !useFreeSession,
-            use_free_session: useFreeSession
+            use_free_session: useFreeSession,
+            discount_code: appliedDiscount?.code ?? null,
         }).unwrap()
 
         navigate("/order/success", {
@@ -143,6 +160,18 @@ export const Checkout = () => {
                 user: authUser
             }
         })
+    }
+
+    const handleValidateDiscount = async () => {
+        setDiscountError("")
+        const applies_to = state && !isEvent ? "session" : cart?.length > 0 ? "gift_voucher" : "both"
+        const result = await validateDiscountCode({ code: discountCode, applies_to })
+        if (result.error) {
+            setDiscountError(result.error.data?.error ?? "Code invalide.")
+            setAppliedDiscount(null)
+        } else {
+            setAppliedDiscount(result.data.discount)
+        }
     }
 
     return (
@@ -251,7 +280,45 @@ export const Checkout = () => {
                     </>
                 }
 
+                <div className="checkout__discount">
+                    <div className="checkout__discount-input-row">
+                        <input
+                            type="text"
+                            className="checkout__discount-input"
+                            placeholder="Code de réduction"
+                            value={discountCode}
+                            onChange={e => {
+                                setDiscountCode(e.target.value.toUpperCase())
+                                setAppliedDiscount(null)
+                                setDiscountError("")
+                            }}
+                        />
+                        <button
+                            className="checkout__discount-btn"
+                            onClick={handleValidateDiscount}
+                            disabled={!discountCode || isValidatingDiscount}
+                        >
+                            {isValidatingDiscount ? "..." : "Appliquer"}
+                        </button>
+                    </div>
+                    {discountError && <p className="checkout__discount-error">{discountError}</p>}
+                    {appliedDiscount && (
+                        <p className="checkout__discount-success">
+                            Code {appliedDiscount.code} appliqué —
+                            -{appliedDiscount.type === 'percent'
+                            ? `${appliedDiscount.value}%`
+                            : `${appliedDiscount.value.toFixed(2)} €`
+                        } ({discountAmount.toFixed(2)} € de réduction)
+                        </p>
+                    )}
+                </div>
+
                 <h3>Total: {totalCheckout.toFixed(2)} € TTC</h3>
+                {appliedDiscount && (
+                    <h3 className="checkout__total-discounted">
+                        Total après réduction: {totalAfterDiscount.toFixed(2)} € TTC
+                    </h3>
+                )}
 
                 {state && (!cart || cart.length === 0) && freeSession && !isEvent &&
                     <button
@@ -265,7 +332,7 @@ export const Checkout = () => {
                     </button>
                 }
 
-                {state && (!cart || cart.length === 0) && !isEvent && !useFreeSession &&
+                {state && (!cart || cart.length === 0) && !isEvent && !useFreeSession && !appliedDiscount &&
                     <button
                         onClick={handlePayOnSite}
                         disabled={isLoadingBooking}

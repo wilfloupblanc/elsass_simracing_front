@@ -38,7 +38,7 @@ export const OrderPdf = ({ orders, reservation, vouchers, qrUrl }) => {
                         <Text style={styles.row}>Heure: {reservation.start_time}</Text>
                         <Text style={styles.row}>Durée: {reservation.duration_minutes} minutes</Text>
                         <Text style={styles.row}>Pilotes: {reservation.quantity}</Text>
-                        <Text style={styles.row}>Prix: {reservation.price_each?.toFixed(2)}€</Text>
+                        <Text style={styles.row}>Prix brut: {reservation.price_each?.toFixed(2)} €</Text>
                     </View>
                 }
                 {vouchers?.length > 0 &&
@@ -47,12 +47,18 @@ export const OrderPdf = ({ orders, reservation, vouchers, qrUrl }) => {
                         {vouchers.map((v, index) =>
                             <View key={index}>
                                 <Text style={styles.row}>Destinataire: {v.recipient_name}</Text>
-                                <Text style={styles.row}>Durée: {v.duration_minutes} minutes – Prix: {v.price_each?.toFixed(2)}€</Text>
+                                <Text style={styles.row}>Durée: {v.duration_minutes} minutes — Prix: {v.price_each?.toFixed(2)} €</Text>
                             </View>
                         )}
                     </View>
                 }
-                <Text style={styles.total}>Total: {order?.amount?.toFixed(2)}€</Text>
+                {order?.discount_code &&
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Réduction</Text>
+                        <Text style={styles.row}>Code appliqué: {order.discount_code}</Text>
+                    </View>
+                }
+                <Text style={styles.total}>Total payé: {order?.amount?.toFixed(2)} €</Text>
                 {qrUrl &&
                     <View style={styles.qrSection}>
                         <Image src={qrUrl} style={styles.qrCode} />

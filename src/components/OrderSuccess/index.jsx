@@ -97,9 +97,12 @@ export const OrderSuccess = () => {
         <>
             {!isLoading && !isFreeSession && !isPayOnSite && data?.orders?.[0] &&
                 <section>
-                    <p>Commande n°: {data.orders[0].order_number}</p>
-                    <p>Date de commande: {new Date(data.orders[0].created_at).toLocaleDateString('fr-FR')}</p>
-                    <p>Total: {data.orders[0].amount.toFixed(2)} €</p>
+                    <p>Commande n° : {data.orders[0].order_number}</p>
+                    <p>Date de commande : {new Date(data.orders[0].created_at).toLocaleDateString('fr-FR')}</p>
+                    {data.orders[0].discount_code && (
+                        <p>Code de réduction : {data.orders[0].discount_code}</p>
+                    )}
+                    <p>Total : {data.orders[0].amount.toFixed(2)} €</p>
                     <p>{data.orders[0].firstname} {data.orders[0].lastname}</p>
                 </section>
             }
@@ -144,7 +147,10 @@ export const OrderSuccess = () => {
                     <p>Heure: {reservation.start_time}</p>
                     <p>Durée: {reservation.duration_minutes} minutes</p>
                     <p>Nombre de pilote(s): {reservation.quantity}</p>
-                    <p>Prix: {reservation.price_each.toFixed(2)} €</p>
+                    {data?.orders?.[0]?.discount_code && (
+                        <p>Code de réduction : {data.orders[0].discount_code}</p>
+                    )}
+                    <p>Total payé : {data?.orders?.[0]?.amount?.toFixed(2)} €</p>
                 </section>
             }
 

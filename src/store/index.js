@@ -17,6 +17,7 @@ import {subscriptionApiSlice} from "./ApiSlice/subscriptionApiSlice.js";
 import {giftVoucherApiSlice} from "./ApiSlice/giftVoucherApiSlice.js";
 import {planApiSlice} from "./ApiSlice/planApiSlice.js";
 import {eventApiSlice} from "./ApiSlice/eventApiSlice.js";
+import {discountApiSlice} from "./ApiSlice/discountApiSlice.js";
 
 const persistConfig = {
     key: "disconnectedCart",
@@ -49,10 +50,11 @@ const store = configureStore({
         giftVoucherApi: giftVoucherApiSlice.reducer,
         planApi: planApiSlice.reducer,
         eventApi: eventApiSlice.reducer,
+        discountApi: discountApiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false
-    }).concat(authApiSlice.middleware, userApiSlice.middleware, availabilityApiSlice.middleware, sessionApiSlice.middleware, cartApiSlice.middleware, contactApiSlice.middleware, bookingApiSlice.middleware, orderApiSlice.middleware, cartItemRecipientApiSlice.middleware, subscriptionApiSlice.middleware, giftVoucherApiSlice.middleware, planApiSlice.middleware, eventApiSlice.middleware),
+    }).concat(authApiSlice.middleware, userApiSlice.middleware, availabilityApiSlice.middleware, sessionApiSlice.middleware, cartApiSlice.middleware, contactApiSlice.middleware, bookingApiSlice.middleware, orderApiSlice.middleware, cartItemRecipientApiSlice.middleware, subscriptionApiSlice.middleware, giftVoucherApiSlice.middleware, planApiSlice.middleware, eventApiSlice.middleware, discountApiSlice.middleware),
 })
 
 export const persistor = persistStore(store)
