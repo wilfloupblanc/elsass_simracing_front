@@ -31,12 +31,16 @@ import {SubscriptionCancel} from "./pages/SubscriptionCancel/index.jsx";
 import {MaintenanceGuard} from "./components/MaintenanceGuard/index.jsx";
 import {ForgotPassword} from "./pages/ForgotPassword/index.jsx";
 import {ResetPassword} from "./pages/ResetPassword/index.jsx";
+import {PromoPopup} from "./components/PromoPopup/index.jsx";
+import {useActivePromo} from "./hooks/useActivePromo.js";
 
 function App() {
+    const { promo, dismiss } = useActivePromo()
 
   return (
       <MaintenanceGuard>
           <>
+              <PromoPopup promo={promo} onDismiss={dismiss} />
               <Header />
               <ScrollToTop/>
               <Routes>
