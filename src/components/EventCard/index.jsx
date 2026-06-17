@@ -81,8 +81,11 @@ export const EventCard = ({ event, user, isAuth, today }) => {
                 <div className="events__card--infos">
                     <p>📅 {formatDate(event.date)}</p>
                     <p>🕐 {event.start_time?.slice(0, 5)} — {event.end_time?.slice(0, 5)}</p>
-                    <p>🖥️ {event.simulators_count} simulateur{event.simulators_count > 1 ? 's' : ''}</p>
-                    <p>💶 {event.price} € / simulateur</p>
+                    <p>
+                        🖥️ {event.simulators_count < 6 && 'Plus que '}
+                        {event.simulators_count} simulateur{event.simulators_count > 1 ? 's' : ''} disponible{event.simulators_count > 1 ? 's' : ''}
+                    </p>
+                    <p>💶 {event.price} € / équipe</p>
                 </div>
 
                 {categories.length > 0 && (
