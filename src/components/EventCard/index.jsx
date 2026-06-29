@@ -11,6 +11,7 @@ export const EventCard = ({ event, user, isAuth, today }) => {
     const dispatch = useDispatch()
     const { data: registrationsData } = useGetEventRegistrationsQuery(event.id)
     const registrationsCount = registrationsData?.count ?? 0
+    const remaining = event.simulators_count - registrationsCount
     const isFull = registrationsCount >= event.simulators_count
 
     const vehicles = event.vehicles ? JSON.parse(event.vehicles) : []
@@ -82,8 +83,8 @@ export const EventCard = ({ event, user, isAuth, today }) => {
                     <p>📅 {formatDate(event.date)}</p>
                     <p>🕐 {event.start_time?.slice(0, 5)} — {event.end_time?.slice(0, 5)}</p>
                     <p>
-                        🖥️ {event.simulators_count < 6 && 'Plus que '}
-                        {event.simulators_count} simulateur{event.simulators_count > 1 ? 's' : ''} disponible{event.simulators_count > 1 ? 's' : ''}
+                        🖥️ {remaining < 6 && 'Plus que '}
+                        {remaining} simulateur{remaining > 1 ? 's' : ''} disponible{remaining > 1 ? 's' : ''}
                     </p>
                     <p>💶 {event.price} € / équipe</p>
                 </div>
